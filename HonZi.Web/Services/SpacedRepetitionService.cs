@@ -162,11 +162,14 @@ namespace HonZi.Web.Services
             if (resultWords.Count < count)
             {
                 var currentIds = resultWords.Select(w => w.WordId).ToHashSet();
-                var remaining = await _context.Words
+                var remainingCandidates = await _context.Words
                     .Where(w => w.HskLevel == hskLevel && !currentIds.Contains(w.WordId))
-                    .OrderBy(w => Guid.NewGuid())
-                    .Take(count - resultWords.Count)
                     .ToListAsync();
+
+                var remaining = remainingCandidates
+                    .OrderBy(_ => Random.Shared.Next())
+                    .Take(count - resultWords.Count)
+                    .ToList();
 
                 resultWords.AddRange(remaining);
             }

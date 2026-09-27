@@ -49,7 +49,16 @@ builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IListeningService, ListeningService>();
 builder.Services.AddScoped<IExcelService, ExcelService>();
 
+builder.Services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 // Ensure SQLite database and tables exist
 using (var scope = app.Services.CreateScope())

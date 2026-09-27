@@ -19,19 +19,17 @@ namespace HonZi.Web.Services
 
         public async Task<QuizSessionModel> GenerateQuizAsync(int hskLevel, int count = 10)
         {
-            var words = await _context.Words
+            var candidates = await _context.Words
                 .Where(w => w.HskLevel == hskLevel)
-                .OrderBy(w => Guid.NewGuid())
-                .Take(count)
                 .ToListAsync();
+
+            var words = candidates.OrderBy(_ => Random.Shared.Next()).Take(count).ToList();
 
             if (!words.Any())
             {
                 // Fallback nếu cấp HSK đó chưa đủ từ
-                words = await _context.Words
-                    .OrderBy(w => Guid.NewGuid())
-                    .Take(count)
-                    .ToListAsync();
+                var allWords = await _context.Words.ToListAsync();
+                words = allWords.OrderBy(_ => Random.Shared.Next()).Take(count).ToList();
             }
 
             var allMeanings = await _context.Words

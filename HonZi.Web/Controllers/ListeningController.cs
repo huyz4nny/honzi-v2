@@ -45,6 +45,12 @@ namespace HonZi.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult Start()
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Start(int hskLevel, string exerciseType = "Word", string inputMode = "Hanzi")

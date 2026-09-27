@@ -40,23 +40,27 @@ namespace HonZi.Web.Services
                     query = query.Where(w => !string.IsNullOrEmpty(w.ExampleSentence));
                 }
 
-                words = await query.OrderBy(w => Guid.NewGuid()).Take(count).ToListAsync();
+                var candidateWords = await query.ToListAsync();
+                words = candidateWords.OrderBy(_ => Random.Shared.Next()).Take(count).ToList();
             }
 
             if (words.Count < count && exerciseType == "Sentence")
             {
-                var extraWords = await _context.Words
+                var extraCandidates = await _context.Words
                     .AsNoTracking()
                     .Where(w => !string.IsNullOrEmpty(w.ExampleSentence) && w.HskLevel != hskLevel)
-                    .OrderBy(w => Guid.NewGuid())
-                    .Take(count - words.Count)
                     .ToListAsync();
+                var extraWords = extraCandidates
+                    .OrderBy(_ => Random.Shared.Next())
+                    .Take(count - words.Count)
+                    .ToList();
                 words.AddRange(extraWords);
             }
 
             if (!words.Any())
             {
-                words = await _context.Words.AsNoTracking().OrderBy(w => Guid.NewGuid()).Take(count).ToListAsync();
+                var allCandidates = await _context.Words.AsNoTracking().ToListAsync();
+                words = allCandidates.OrderBy(_ => Random.Shared.Next()).Take(count).ToList();
             }
 
             var session = new ListeningSession
