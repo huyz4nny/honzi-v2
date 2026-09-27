@@ -41,13 +41,19 @@
                     </p>
                     
                     <div class="mt-6 d-flex flex-wrap gap-3">
-                        <a asp-controller="Listening" asp-action="Index" class="btn btn-primary btn-lg shadow-lift">
+                        <a asp-controller="Listening" asp-action="Index" class="btn btn-primary btn-lg shadow-lift"
+                           data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                           data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Luyện nghe chép chính tả" : null)">
                             <i class="fa-solid fa-headphones me-2"></i> Luyện nghe ngay
                         </a>
-                        <a asp-controller="Flashcard" asp-action="Index" class="btn btn-outline btn-lg">
+                        <a asp-controller="Flashcard" asp-action="Index" class="btn btn-outline btn-lg"
+                           data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                           data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Flashcard 3D" : null)">
                             Lật Flashcard
                         </a>
-                        <a asp-controller="Words" asp-action="Index" class="btn btn-outline btn-lg">
+                        <a asp-controller="Words" asp-action="Index" class="btn btn-outline btn-lg"
+                           data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                           data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Kho từ vựng HSK" : null)">
                             Kho từ vựng (@(ViewBag.TotalWords ?? 483))
                         </a>
                     </div>
@@ -129,14 +135,20 @@
                         
                         <div class="mt-4 d-grid gap-2">
                             <div class="d-flex gap-2">
-                                <a asp-controller="Flashcard" asp-action="Index" asp-route-hskLevel="@lvl.Hsk" class="btn btn-outline btn-sm flex-1">
+                                <a asp-controller="Flashcard" asp-action="Index" asp-route-hskLevel="@lvl.Hsk" class="btn btn-outline btn-sm flex-1"
+                                   data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                                   data-feature-name="@(User.Identity?.IsAuthenticated != true ? $"Flashcard cấp độ {lvl.Hsk}" : null)">
                                     <i class="fa-solid fa-layer-group me-1"></i> Flashcard
                                 </a>
-                                <a asp-controller="Quiz" asp-action="Index" asp-route-hskLevel="@lvl.Hsk" class="btn btn-outline btn-sm flex-1">
+                                <a asp-controller="Quiz" asp-action="Index" asp-route-hskLevel="@lvl.Hsk" class="btn btn-outline btn-sm flex-1"
+                                   data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                                   data-feature-name="@(User.Identity?.IsAuthenticated != true ? $"Quiz kiểm tra cấp độ {lvl.Hsk}" : null)">
                                     <i class="fa-solid fa-clipboard-question me-1"></i> Quiz
                                 </a>
                             </div>
-                            <a asp-controller="Listening" asp-action="Index" asp-route-hskLevel="@lvl.Hsk" class="btn btn-primary btn-sm w-full">
+                            <a asp-controller="Listening" asp-action="Index" asp-route-hskLevel="@lvl.Hsk" class="btn btn-primary btn-sm w-full"
+                               data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                               data-feature-name="@(User.Identity?.IsAuthenticated != true ? $"Luyện nghe cấp độ {lvl.Hsk}" : null)">
                                 <i class="fa-solid fa-headphones me-1"></i> Luyện nghe cấp độ @lvl.Hsk
                             </a>
                         </div>
@@ -253,7 +265,9 @@
                         <li><strong>Tích hợp toàn diện:</strong> Áp dụng ngay khi lật Flashcard, làm bài Quiz trắc nghiệm và Luyện nghe chính tả.</li>
                     </ul>
                     <div class="mt-6 text-center">
-                        <a asp-controller="Progress" asp-action="Index" class="btn btn-primary btn-md shadow-lift w-full">
+                        <a asp-controller="Progress" asp-action="Index" class="btn btn-primary btn-md shadow-lift w-full"
+                           data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                           data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Hàng đợi Spaced Repetition" : null)">
                             <i class="fa-solid fa-list-check me-2"></i> Xem hàng đợi ôn tập SRS của bạn
                         </a>
                     </div>
@@ -457,11 +471,15 @@
                     Hơn 480 từ vựng HSK 1 - 6, bài tập luyện nghe chép chính tả và thuật toán SRS thông minh đang chờ đón bạn.
                 </p>
                 <div class="mt-6 d-flex flex-wrap justify-content-center gap-3">
-                    <a asp-controller="Listening" asp-action="Index" class="btn btn-lg shadow-lift" style="background: #ffffff; color: var(--primary); font-weight: 700; border: none;">
+                    <a asp-controller="Listening" asp-action="Index" class="btn btn-lg shadow-lift" style="background: #ffffff; color: var(--primary); font-weight: 700; border: none;"
+                       data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                       data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Luyện nghe chép chính tả" : null)">
                         <i class="fa-solid fa-headphones me-2"></i> Trải nghiệm Luyện nghe ngay
                     </a>
-                    <a asp-controller="Flashcard" asp-action="Index" class="btn btn-outline btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.6);">
-                        Lật Flashcard 3D
+                    <a asp-controller="Flashcard" asp-action="Index" class="btn btn-outline-white btn-lg shadow-lift"
+                       data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
+                       data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Flashcard 3D" : null)">
+                        <i class="fa-solid fa-layer-group me-2"></i> Lật Flashcard 3D
                     </a>
                 </div>
             </div>
@@ -469,3 +487,6 @@
         </div>
     </section>
 </div>
+
+<!-- Modal Giới thiệu nền tảng HanziGo (Chỉ xuất hiện tại Trang chủ) -->
+<partial name="_WelcomeModal" />

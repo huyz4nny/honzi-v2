@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HonZi.Web.Models;
 using HonZi.Web.Models.ViewModels;
@@ -9,6 +10,7 @@ using HonZi.Web.Services;
 
 namespace HonZi.Web.Controllers
 {
+    [Authorize]
     public class FlashcardController : Controller
     {
         private readonly IWordService _wordService;

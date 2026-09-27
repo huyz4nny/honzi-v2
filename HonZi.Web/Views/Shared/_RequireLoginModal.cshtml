@@ -1,0 +1,119 @@
+@if (User.Identity?.IsAuthenticated != true)
+{
+    <!-- Modal Yêu cầu đăng nhập khi chưa đăng nhập mà bấm vào các tính năng -->
+    <div id="requireLoginModalBackdrop" class="modal-backdrop" style="background-color: rgba(15, 23, 42, 0.65); backdrop-filter: blur(8px); z-index: 10000;" onclick="handleRequireLoginBackdropClick(event)">
+        <div class="modal-dialog" style="max-width: 480px; width: 92%; padding: 0; border-radius: 1.5rem; overflow: hidden; position: relative; border: 1px solid rgba(194, 59, 43, 0.25); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35); background: #ffffff;">
+            
+            <!-- Header Banner with Hanzi Motif -->
+            <div style="background: linear-gradient(135deg, #c23b2b 0%, #991b1b 100%); color: #ffffff; padding: 2rem 2rem 1.5rem; position: relative; overflow: hidden; text-align: center;">
+                <!-- Watermark character -->
+                <div style="position: absolute; right: 1rem; bottom: -1rem; font-family: var(--font-hanzi, 'Noto Serif SC', serif); font-size: 6.5rem; font-weight: 900; color: rgba(255, 255, 255, 0.08); line-height: 1; pointer-events: none; user-select: none;">
+                    学
+                </div>
+
+                <button type="button" onclick="closeRequireLoginModal()" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255, 255, 255, 0.2); border: none; color: #ffffff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;" title="Đóng" aria-label="Đóng">
+                    <i class="fa-solid fa-xmark" style="font-size: 1rem;"></i>
+                </button>
+
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px); margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    <i class="fa-solid fa-lock text-white"></i>
+                </div>
+
+                <h3 class="text-white fw-extrabold mb-1" style="font-size: 1.4rem; letter-spacing: -0.01em;">
+                    Yêu Cầu Đăng Nhập
+                </h3>
+                <p style="color: rgba(255, 255, 255, 0.92); font-size: 0.9rem; margin-bottom: 0; line-height: 1.45;" id="requireLoginDesc">
+                    Bạn cần đăng nhập tài khoản để sử dụng tính năng này!
+                </p>
+            </div>
+
+            <!-- Modal Content -->
+            <div style="padding: 1.75rem 2rem 1.5rem;">
+                <div class="p-3 rounded-xl mb-4 d-flex align-items-start gap-3" style="background: #fdf2f0; border: 1px solid rgba(194, 59, 43, 0.2);">
+                    <i class="fa-solid fa-circle-exclamation text-primary mt-1" style="font-size: 1.1rem; flex-shrink: 0;"></i>
+                    <div style="font-size: 0.875rem; color: #4b5563; line-height: 1.5;">
+                        Các tính năng <strong>Luyện nghe chép chính tả</strong>, <strong>Flashcard 3D</strong>, <strong>Kiểm tra trắc nghiệm</strong>, <strong>Kho từ vựng</strong> và <strong>Thống kê tiến độ</strong> yêu cầu tài khoản học viên để lưu lại kết quả và tính chu kỳ ghi nhớ SRS.
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2.5">
+                    <a id="requireLoginDirectBtn" href="/Auth/Login" class="btn btn-primary btn-lg w-full shadow-lift" style="font-size: 1rem; font-weight: 700; padding: 0.8rem 1rem;">
+                        <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Đăng nhập ngay
+                    </a>
+                    
+                    <a id="requireRegisterDirectBtn" href="/Auth/Register" class="btn btn-outline btn-md w-full" style="font-size: 0.9rem; padding: 0.65rem 1rem;">
+                        <i class="fa-solid fa-user-plus me-2"></i> Tạo tài khoản mới miễn phí
+                    </a>
+
+                    <button type="button" onclick="closeRequireLoginModal()" class="btn btn-ghost btn-sm text-muted mt-1" style="font-size: 0.85rem;">
+                        Để sau, tôi muốn xem tiếp trang chủ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Small Tip -->
+            <div class="py-2.5 px-4 text-center text-muted" style="background: #faf8f5; border-top: 1px solid var(--border); font-size: 0.775rem;">
+                <i class="fa-solid fa-shield-halved me-1 text-primary"></i> Đăng ký nhanh chỉ mất 30 giây, hoàn toàn miễn phí
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        function requireLoginPrompt(featureName, targetUrl) {
+            var modal = document.getElementById('requireLoginModalBackdrop');
+            var dest = targetUrl || '/';
+
+            if (!modal) {
+                window.location.href = '/Auth/Login?ReturnUrl=' + encodeURIComponent(dest);
+                return false;
+            }
+
+            var descElem = document.getElementById('requireLoginDesc');
+            if (descElem) {
+                if (featureName) {
+                    descElem.innerHTML = 'Bạn cần đăng nhập tài khoản để sử dụng tính năng <strong>' + featureName + '</strong>!';
+                } else {
+                    descElem.textContent = 'Bạn cần đăng nhập tài khoản để sử dụng tính năng này!';
+                }
+            }
+
+            var loginBtn = document.getElementById('requireLoginDirectBtn');
+            if (loginBtn) {
+                loginBtn.href = '/Auth/Login?ReturnUrl=' + encodeURIComponent(dest);
+            }
+
+            var regBtn = document.getElementById('requireRegisterDirectBtn');
+            if (regBtn) {
+                regBtn.href = '/Auth/Register?ReturnUrl=' + encodeURIComponent(dest);
+            }
+
+            modal.classList.add('show');
+            return false;
+        }
+
+        function closeRequireLoginModal() {
+            var modal = document.getElementById('requireLoginModalBackdrop');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function handleRequireLoginBackdropClick(event) {
+            if (event.target && event.target.id === 'requireLoginModalBackdrop') {
+                closeRequireLoginModal();
+            }
+        }
+
+        // Tự động bắt sự kiện click trên các nút có data-require-auth="true"
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('click', function(e) {
+                var target = e.target.closest('[data-require-auth="true"]');
+                if (target) {
+                    e.preventDefault();
+                    var featureName = target.getAttribute('data-feature-name') || '';
+                    var targetUrl = target.getAttribute('href') || '/';
+                    requireLoginPrompt(featureName, targetUrl);
+                }
+            });
+        });
+    </script>
+}

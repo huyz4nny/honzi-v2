@@ -102,9 +102,18 @@
                 <button type="button" onclick="closeWelcomeModal()" class="btn btn-outline btn-sm">
                     Khám phá trang chủ
                 </button>
-                <a href="/Listening" class="btn btn-primary btn-sm shadow-lift" onclick="closeWelcomeModal()">
-                    <i class="fa-solid fa-headphones me-1"></i> Luyện nghe thử ngay
-                </a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/Listening" class="btn btn-primary btn-sm shadow-lift" onclick="closeWelcomeModal()">
+                        <i class="fa-solid fa-headphones me-1"></i> Luyện nghe thử ngay
+                    </a>
+                }
+                else
+                {
+                    <a href="/Listening" data-require-auth="true" data-feature-name="Luyện nghe chép chính tả" class="btn btn-primary btn-sm shadow-lift" onclick="closeWelcomeModal()">
+                        <i class="fa-solid fa-headphones me-1"></i> Luyện nghe thử ngay
+                    </a>
+                }
             </div>
         </div>
         
@@ -143,8 +152,13 @@
         }
     }
 
-    // Tự động mở khi trang tải xong nếu người dùng chưa chọn bỏ qua
+    // Tự động mở khi trang tải xong (nếu bấm Giới thiệu thì luôn mở, ngược lại mở nếu chưa chọn bỏ qua)
     document.addEventListener('DOMContentLoaded', function() {
-        openWelcomeModal(false);
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('intro') === '1') {
+            openWelcomeModal(true);
+        } else {
+            openWelcomeModal(false);
+        }
     });
 </script>

@@ -11,6 +11,7 @@ using HonZi.Web.Services;
 
 namespace HonZi.Web.Controllers
 {
+    [Authorize]
     public class WordsController : Controller
     {
         private readonly IWordService _wordService;

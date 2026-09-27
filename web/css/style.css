@@ -452,6 +452,20 @@ img {
   border-color: var(--border);
 }
 
+.btn-outline-white {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+.btn-outline-white:hover {
+  background-color: #ffffff !important;
+  color: var(--primary) !important;
+  border-color: #ffffff !important;
+}
+
 .btn-secondary {
   background-color: var(--secondary);
   color: var(--secondary-foreground);

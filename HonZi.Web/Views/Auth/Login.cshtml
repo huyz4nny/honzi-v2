@@ -21,17 +21,30 @@
 
             <!-- Tab Switcher -->
             <div class="d-grid grid-cols-2 gap-1 p-1 rounded-xl bg-secondary mb-6">
-                <a asp-controller="Auth" asp-action="Login" 
+                <a asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl"
                    class="btn btn-sm btn-primary text-center" 
                    style="border-radius: var(--radius-md);">
                     Đăng nhập
                 </a>
-                <a asp-controller="Auth" asp-action="Register" 
+                <a asp-controller="Auth" asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl"
                    class="btn btn-sm btn-ghost text-center" 
                    style="border-radius: var(--radius-md);">
                     Đăng ký
                 </a>
             </div>
+
+            @if (!string.IsNullOrEmpty(Model?.ReturnUrl))
+            {
+                <div class="mb-5 p-3.5 rounded-xl d-flex align-items-center gap-3" style="background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: 0.875rem;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #fee2e2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fa-solid fa-lock" style="color: #dc2626; font-size: 1rem;"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" style="color: #991b1b; font-size: 0.9rem;">Yêu cầu đăng nhập</div>
+                        <div style="color: #b91c1c; font-size: 0.825rem; line-height: 1.4;">Bạn cần đăng nhập tài khoản để sử dụng tính năng này!</div>
+                    </div>
+                </div>
+            }
 
             <form asp-controller="Auth" asp-action="Login" method="post" class="d-grid gap-4">
                 <input type="hidden" asp-for="ReturnUrl" />

@@ -7,6 +7,7 @@ using HonZi.Web.Services;
 
 namespace HonZi.Web.Controllers
 {
+    [Authorize]
     public class ProgressController : Controller
     {
         private readonly IProgressService _progressService;
@@ -28,12 +29,6 @@ namespace HonZi.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (User.Identity?.IsAuthenticated != true)
-            {
-                // Guest mode overview
-                return View(new ProgressDashboardViewModel());
-            }
-
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdStr, out int userId))
             {

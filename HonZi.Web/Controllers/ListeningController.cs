@@ -2,12 +2,14 @@ using System;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HonZi.Web.Models.ViewModels;
 using HonZi.Web.Services;
 
 namespace HonZi.Web.Controllers
 {
+    [Authorize]
     public class ListeningController : Controller
     {
         private readonly IListeningService _listeningService;

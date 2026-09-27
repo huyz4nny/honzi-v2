@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HonZi.Web.Models.ViewModels;
 using HonZi.Web.Services;
 
 namespace HonZi.Web.Controllers
 {
+    [Authorize]
     public class QuizController : Controller
     {
         private readonly IQuizService _quizService;
