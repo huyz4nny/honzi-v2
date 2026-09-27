@@ -4,7 +4,7 @@
 
 <div class="main-content">
     <!-- Hero Section -->
-    <section class="bg-hero py-14" style="padding-top: 3.5rem; padding-bottom: 4.5rem;">
+    <section class="bg-hero" style="padding-top: 3.5rem; padding-bottom: 3.5rem;">
         <div class="container">
             @if (ViewBag.DueCount != null && ViewBag.DueCount > 0)
             {
@@ -82,7 +82,7 @@
     </section>
 
     <!-- HSK Level Selection Section -->
-    <section class="py-14">
+    <section class="home-section">
         <div class="container">
             <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-6">
                 <div>
@@ -158,62 +158,8 @@
         </div>
     </section>
 
-    <!-- Tính Năng Nổi Bật -->
-    <section class="py-14 bg-secondary">
-        <div class="container">
-            <h2 class="text-center text-ink fw-extrabold tracking-tight" style="font-size: 1.85rem;">
-                Phương Pháp Học Tập Toàn Diện 4 Kỹ Năng
-            </h2>
-            <p class="text-center text-muted mt-2 mb-10" style="max-width: 600px; margin-left: auto; margin-right: auto;">
-                Kết hợp giữa thị giác (Flashcard 3D), thính giác (Phát âm chuẩn & bài tập Dictation) và vận động tư duy (Gõ Hán tự / Pinyin).
-            </p>
-
-            <div class="d-grid sm-grid-cols-2 lg-grid-cols-4 gap-4">
-                <div class="card text-center p-6">
-                    <div style="font-size: 2.25rem; color: var(--primary); margin-bottom: 1rem;">
-                        <i class="fa-solid fa-layer-group"></i>
-                    </div>
-                    <h3 class="fw-bold text-ink" style="font-size: 1.1rem;">Flashcard Lật 3D</h3>
-                    <p class="text-muted mt-2" style="font-size: 0.85rem;">
-                        Lật thẻ 3 chiều mô phỏng cảm giác cầm thẻ học thật, xem chi tiết chữ Hán, Pinyin và câu ví dụ.
-                    </p>
-                </div>
-
-                <div class="card text-center p-6" style="border: 2px solid rgba(194, 58, 34, 0.3);">
-                    <div style="font-size: 2.25rem; color: var(--primary); margin-bottom: 1rem;">
-                        <i class="fa-solid fa-headphones"></i>
-                    </div>
-                    <h3 class="fw-bold text-ink" style="font-size: 1.1rem;">Luyện Nghe Chép Chính Tả</h3>
-                    <p class="text-muted mt-2" style="font-size: 0.85rem;">
-                        Nghe audio phát âm và gõ lại Hán tự hoặc Pinyin. Thuật toán so sánh diff ký tự chỉ ra ngay chỗ sai.
-                    </p>
-                </div>
-
-                <div class="card text-center p-6">
-                    <div style="font-size: 2.25rem; color: var(--primary); margin-bottom: 1rem;">
-                        <i class="fa-solid fa-stopwatch-20"></i>
-                    </div>
-                    <h3 class="fw-bold text-ink" style="font-size: 1.1rem;">Quiz Trắc Nghiệm Tính Giờ</h3>
-                    <p class="text-muted mt-2" style="font-size: 0.85rem;">
-                        Đề thi 10 câu ngẫu nhiên có bấm giờ. Chấm điểm tự động và giải thích chi tiết từng câu.
-                    </p>
-                </div>
-
-                <div class="card text-center p-6">
-                    <div style="font-size: 2.25rem; color: var(--primary); margin-bottom: 1rem;">
-                        <i class="fa-solid fa-chart-pie"></i>
-                    </div>
-                    <h3 class="fw-bold text-ink" style="font-size: 1.1rem;">Theo Dõi Tiến Độ</h3>
-                    <p class="text-muted mt-2" style="font-size: 0.85rem;">
-                        Biểu đồ phân loại từ vựng Đã thuộc / Đang học / Chưa học và danh sách từ vựng cần ôn tập gấp.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Spaced Repetition System Section -->
-    <section class="py-16" style="background: var(--background); border-top: 1px solid var(--border);">
+    <section class="home-section" style="background: var(--background); border-top: 1px solid var(--border);">
         <div class="container">
             <!-- Section Header Centered -->
             <div class="text-center mb-10">
@@ -231,85 +177,85 @@
             <!-- Two Symmetrical Equal-Height Cards -->
             <div class="d-grid md-grid-cols-2 gap-6 align-items-stretch">
                 <!-- Left Column: 5 Leitner Boxes -->
-                <div class="card shadow-card p-6 d-flex flex-column justify-content-between h-100" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
+                <div class="card shadow-card p-5 d-flex flex-column justify-content-between h-100" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
                     <div>
                         <div class="d-flex align-items-center gap-3 pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
-                            <span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.15rem; flex-shrink: 0;">
+                            <span style="display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: var(--radius-md); background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.1rem; flex-shrink: 0;">
                                 <i class="fa-solid fa-boxes-stacked"></i>
                             </span>
                             <div>
-                                <h3 class="fw-bold text-ink mb-0" style="font-size: 1.2rem;">5 Cấp Độ Chu Kỳ Ôn Tập</h3>
+                                <h3 class="fw-bold text-ink mb-0" style="font-size: 1.15rem;">5 Cấp Độ Chu Kỳ Ôn Tập</h3>
                                 <span class="text-muted" style="font-size: 0.8rem;">Từ vựng tự động thăng cấp theo chu kỳ 1 → 30 ngày</span>
                             </div>
                         </div>
 
-                        <div class="d-flex flex-column gap-2.5">
+                        <div class="d-flex flex-column gap-2">
                             <!-- Hộp 1 -->
-                            <div class="p-3 d-flex align-items-center justify-content-between gap-3" style="background: #faf8f5; border: 1px solid var(--border); border-radius: var(--radius-lg);">
-                                <div class="d-flex align-items-center gap-3">
-                                    <span class="badge badge-primary" style="min-width: 62px; justify-content: center; font-weight: 700;">Hộp 1</span>
-                                    <div>
-                                        <div class="fw-bold text-ink" style="font-size: 0.9rem;">Từ mới & Vừa sai</div>
-                                        <div class="text-muted" style="font-size: 0.775rem;">Cần củng cố phản xạ ngay</div>
+                            <div class="leitner-box-row d-flex align-items-center justify-content-between gap-2.5">
+                                <div class="d-flex align-items-center gap-2.5" style="min-width: 0;">
+                                    <span class="badge badge-primary leitner-badge">Hộp 1</span>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-ink leitner-title" style="font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Từ mới & Vừa sai</div>
+                                        <div class="text-muted leitner-desc" style="font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Củng cố phản xạ tức thì</div>
                                     </div>
                                 </div>
-                                <span class="badge badge-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; white-space: nowrap; flex-shrink: 0;">
+                                <span class="badge badge-secondary leitner-tag">
                                     <i class="fa-regular fa-calendar-check me-1 text-primary"></i> Ôn sau 1 ngày
                                 </span>
                             </div>
 
                             <!-- Hộp 2 -->
-                            <div class="p-3 d-flex align-items-center justify-content-between gap-3" style="background: #faf8f5; border: 1px solid var(--border); border-radius: var(--radius-lg);">
-                                <div class="d-flex align-items-center gap-3">
-                                    <span class="badge badge-secondary" style="min-width: 62px; justify-content: center; font-weight: 700;">Hộp 2</span>
-                                    <div>
-                                        <div class="fw-bold text-ink" style="font-size: 0.9rem;">Ghi nhớ cơ bản</div>
-                                        <div class="text-muted" style="font-size: 0.775rem;">Bắt đầu nhận diện mặt chữ</div>
+                            <div class="leitner-box-row d-flex align-items-center justify-content-between gap-2.5">
+                                <div class="d-flex align-items-center gap-2.5" style="min-width: 0;">
+                                    <span class="badge badge-secondary leitner-badge">Hộp 2</span>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-ink leitner-title" style="font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Ghi nhớ cơ bản</div>
+                                        <div class="text-muted leitner-desc" style="font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bắt đầu nhận diện mặt chữ</div>
                                     </div>
                                 </div>
-                                <span class="badge badge-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; white-space: nowrap; flex-shrink: 0;">
+                                <span class="badge badge-secondary leitner-tag">
                                     <i class="fa-regular fa-calendar-check me-1 text-primary"></i> Ôn sau 3 ngày
                                 </span>
                             </div>
 
                             <!-- Hộp 3 -->
-                            <div class="p-3 d-flex align-items-center justify-content-between gap-3" style="background: #faf8f5; border: 1px solid var(--border); border-radius: var(--radius-lg);">
-                                <div class="d-flex align-items-center gap-3">
-                                    <span class="badge badge-secondary" style="min-width: 62px; justify-content: center; font-weight: 700;">Hộp 3</span>
-                                    <div>
-                                        <div class="fw-bold text-ink" style="font-size: 0.9rem;">Ghi nhớ trung hạn</div>
-                                        <div class="text-muted" style="font-size: 0.775rem;">Phản xạ phát âm & Pinyin tốt</div>
+                            <div class="leitner-box-row d-flex align-items-center justify-content-between gap-2.5">
+                                <div class="d-flex align-items-center gap-2.5" style="min-width: 0;">
+                                    <span class="badge badge-secondary leitner-badge">Hộp 3</span>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-ink leitner-title" style="font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Ghi nhớ trung hạn</div>
+                                        <div class="text-muted leitner-desc" style="font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Phản xạ phát âm & Pinyin tốt</div>
                                     </div>
                                 </div>
-                                <span class="badge badge-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; white-space: nowrap; flex-shrink: 0;">
+                                <span class="badge badge-secondary leitner-tag">
                                     <i class="fa-regular fa-calendar-check me-1 text-primary"></i> Ôn sau 7 ngày
                                 </span>
                             </div>
 
                             <!-- Hộp 4 -->
-                            <div class="p-3 d-flex align-items-center justify-content-between gap-3" style="background: #faf8f5; border: 1px solid var(--border); border-radius: var(--radius-lg);">
-                                <div class="d-flex align-items-center gap-3">
-                                    <span class="badge badge-secondary" style="min-width: 62px; justify-content: center; font-weight: 700;">Hộp 4</span>
-                                    <div>
-                                        <div class="fw-bold text-ink" style="font-size: 0.9rem;">Ghi nhớ vững chắc</div>
-                                        <div class="text-muted" style="font-size: 0.775rem;">Vận dụng trôi chảy vào câu</div>
+                            <div class="leitner-box-row d-flex align-items-center justify-content-between gap-2.5">
+                                <div class="d-flex align-items-center gap-2.5" style="min-width: 0;">
+                                    <span class="badge badge-secondary leitner-badge">Hộp 4</span>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-ink leitner-title" style="font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Ghi nhớ vững chắc</div>
+                                        <div class="text-muted leitner-desc" style="font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Vận dụng trôi chảy vào câu</div>
                                     </div>
                                 </div>
-                                <span class="badge badge-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; white-space: nowrap; flex-shrink: 0;">
+                                <span class="badge badge-secondary leitner-tag">
                                     <i class="fa-regular fa-calendar-check me-1 text-primary"></i> Ôn sau 14 ngày
                                 </span>
                             </div>
 
                             <!-- Hộp 5 -->
-                            <div class="p-3 d-flex align-items-center justify-content-between gap-3" style="background: #faf8f5; border: 1px solid var(--border); border-radius: var(--radius-lg);">
-                                <div class="d-flex align-items-center gap-3">
-                                    <span class="badge badge-secondary" style="min-width: 62px; justify-content: center; font-weight: 700;">Hộp 5</span>
-                                    <div>
-                                        <div class="fw-bold text-ink" style="font-size: 0.9rem;">Thành thạo vĩnh viễn</div>
-                                        <div class="text-muted" style="font-size: 0.775rem;">Đã in sâu vào trí nhớ dài hạn</div>
+                            <div class="leitner-box-row d-flex align-items-center justify-content-between gap-2.5">
+                                <div class="d-flex align-items-center gap-2.5" style="min-width: 0;">
+                                    <span class="badge badge-secondary leitner-badge">Hộp 5</span>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-ink leitner-title" style="font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Thành thạo vĩnh viễn</div>
+                                        <div class="text-muted leitner-desc" style="font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">In sâu vào trí nhớ dài hạn</div>
                                     </div>
                                 </div>
-                                <span class="badge badge-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; white-space: nowrap; flex-shrink: 0;">
+                                <span class="badge badge-secondary leitner-tag">
                                     <i class="fa-regular fa-calendar-check me-1 text-primary"></i> Ôn sau 30 ngày
                                 </span>
                             </div>
@@ -318,47 +264,47 @@
                 </div>
 
                 <!-- Right Column: Why it works -->
-                <div class="card shadow-card p-6 d-flex flex-column justify-content-between h-100" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
+                <div class="card shadow-card p-5 d-flex flex-column justify-content-between h-100" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
                     <div>
                         <div class="d-flex align-items-center gap-3 pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
-                            <span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.15rem; flex-shrink: 0;">
+                            <span style="display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: var(--radius-md); background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.1rem; flex-shrink: 0;">
                                 <i class="fa-solid fa-chart-line"></i>
                             </span>
                             <div>
-                                <h3 class="fw-bold text-ink mb-0" style="font-size: 1.2rem;">Tại Sao Phương Pháp Này Hiệu Quả?</h3>
-                                <span class="text-muted" style="font-size: 0.8rem;">Cơ chế khoa học đã được chứng minh</span>
+                                <h3 class="fw-bold text-ink mb-0" style="font-size: 1.15rem;">Tại Sao Phương Pháp Này Hiệu Quả?</h3>
+                                <span class="text-muted" style="font-size: 0.8rem;">Cơ chế khoa học đã được kiểm chứng</span>
                             </div>
                         </div>
 
-                        <ul class="d-flex flex-column gap-3.5 text-muted mb-0" style="list-style: none; padding-left: 0; font-size: 0.925rem; line-height: 1.6;">
+                        <ul class="d-flex flex-column gap-3.5 text-muted mb-0" style="list-style: none; padding-left: 0; font-size: 0.9rem; line-height: 1.6;">
                             <li class="d-flex align-items-start gap-2.5">
-                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 0.95rem; flex-shrink: 0;"></i>
                                 <div>
                                     <strong class="text-ink">Chống học vẹt:</strong> Không nhồi nhét hàng trăm từ trong 1 ngày rồi quên sạch sau 1 tuần.
                                 </div>
                             </li>
                             <li class="d-flex align-items-start gap-2.5">
-                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 0.95rem; flex-shrink: 0;"></i>
                                 <div>
-                                    <strong class="text-ink">Tập trung vào điểm yếu:</strong> Từ nào bạn hay gõ sai hoặc quên sẽ tự động quay về Hộp 1 để luyện tập nhiều hơn.
+                                    <strong class="text-ink">Tập trung điểm yếu:</strong> Từ nào bạn hay gõ sai hoặc quên sẽ tự động quay về Hộp 1 để rèn luyện nhiều hơn.
                                 </div>
                             </li>
                             <li class="d-flex align-items-start gap-2.5">
-                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 0.95rem; flex-shrink: 0;"></i>
                                 <div>
-                                    <strong class="text-ink">Tiết kiệm 80% thời gian:</strong> Bạn chỉ cần ôn tập những từ "sắp quên" thay vì xem lại toàn bộ từ vựng đã nhớ.
+                                    <strong class="text-ink">Tiết kiệm 80% thời gian:</strong> Chỉ ôn tập những từ "sắp quên" theo đúng thời điểm vàng thay vì lật lại cả nghìn từ.
                                 </div>
                             </li>
                             <li class="d-flex align-items-start gap-2.5">
-                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                                <i class="fa-solid fa-circle-check text-primary mt-1" style="font-size: 0.95rem; flex-shrink: 0;"></i>
                                 <div>
-                                    <strong class="text-ink">Tích hợp toàn diện:</strong> Áp dụng ngay khi lật Flashcard, làm bài Quiz trắc nghiệm và Luyện nghe chính tả.
+                                    <strong class="text-ink">Tích hợp toàn diện:</strong> Đồng bộ liền mạch khi lật Flashcard 3D, làm bài Quiz trắc nghiệm và Luyện nghe chính tả.
                                 </div>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="mt-6 pt-4 text-center" style="border-top: 1px solid var(--border);">
+                    <div class="mt-5 pt-4 text-center" style="border-top: 1px solid var(--border);">
                         <a asp-controller="Progress" asp-action="Index" class="btn btn-primary btn-md shadow-lift w-full"
                            data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
                            data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Hàng đợi Spaced Repetition" : null)">
@@ -370,17 +316,17 @@
         </div>
     </section>
 
-    <!-- Why Choose HonziGo Section -->
-    <section class="py-16 bg-secondary" style="border-top: 1px solid var(--border);">
+    <!-- Why Choose HonziGo & Core Value Pillars Section -->
+    <section class="home-section bg-secondary" style="border-top: 1px solid var(--border);">
         <div class="container">
-            <div class="text-center mb-12">
+            <div class="text-center mb-10">
                 <span class="badge badge-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider">
                     <i class="fa-solid fa-trophy me-1"></i> Giá trị khác biệt
                 </span>
-                <h2 class="text-ink fw-extrabold tracking-tight mt-3" style="font-size: 2.25rem;">
+                <h2 class="text-ink fw-extrabold tracking-tight mt-3" style="font-size: 2.15rem;">
                     Tại Sao Bạn Nên Chọn HonziGo?
                 </h2>
-                <p class="text-muted mt-2 mx-auto" style="max-width: 650px; font-size: 1.05rem;">
+                <p class="text-muted mt-2 mx-auto" style="max-width: 650px; font-size: 1rem; line-height: 1.6;">
                     Bản so sánh thực tế chỉ ra lý do tại sao phương pháp học đa giác quan kết hợp thuật toán SRS tại HonziGo giúp bạn học nhanh gấp 3 lần so với phương pháp truyền thống.
                 </p>
             </div>
@@ -388,116 +334,116 @@
             <!-- Comparison Matrix Grid: Traditional vs HonziGo -->
             <div class="d-grid md-grid-cols-2 gap-6 align-items-stretch">
                 
-                <!-- Left Column: Cách học truyền thống & Ứng dụng thông thường -->
-                <div class="card p-6 shadow-card" style="border: 1px solid var(--border); background: #faf8f5; border-radius: var(--radius-xl); display: flex; flex-direction: column;">
-                    <div class="d-flex align-items-center gap-3 pb-4 mb-5" style="border-bottom: 1px solid var(--border);">
-                        <span style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(122, 114, 110, 0.12); color: var(--muted-foreground); font-size: 1.25rem;">
+                <!-- Left Column: Cách học truyền thống -->
+                <div class="card p-5 shadow-card d-flex flex-column h-100" style="border: 1px solid var(--border); background: #faf8f5; border-radius: var(--radius-xl);">
+                    <div class="d-flex align-items-center gap-3 pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
+                        <span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; background: rgba(122, 114, 110, 0.12); color: var(--muted-foreground); font-size: 1.15rem; flex-shrink: 0;">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </span>
                         <div>
-                            <h3 class="fw-bold text-ink mb-0" style="font-size: 1.2rem;">Cách Học Truyền Thống</h3>
-                            <span class="text-muted" style="font-size: 0.825rem;">Sách vở, chép tay hoặc Flashcard thụ động</span>
+                            <h3 class="fw-bold text-ink mb-0" style="font-size: 1.15rem;">Cách Học Truyền Thống</h3>
+                            <span class="text-muted" style="font-size: 0.8rem;">Sách vở, chép tay hoặc Flashcard thụ động</span>
                         </div>
                     </div>
 
-                    <ul class="d-flex flex-column gap-4 text-muted mb-auto" style="list-style: none; padding-left: 0; font-size: 0.925rem;">
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-xmark text-muted mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                    <ul class="d-flex flex-column gap-3.5 text-muted mb-auto" style="list-style: none; padding-left: 0; font-size: 0.885rem; line-height: 1.55;">
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-xmark text-muted" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">Học vẹt, học trước quên sau:</strong>
-                                Nhồi nhét hàng chục từ trong ngày rồi quên sạch sau 1 tuần vì không có chu kỳ ôn tập ngắt quãng khoa học.
+                                <strong class="text-ink">Học vẹt, nhanh quên:</strong>
+                                Nhồi nhét hàng chục từ trong ngày rồi quên sạch sau 1 tuần vì thiếu chu kỳ ôn ngắt quãng khoa học.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-xmark text-muted mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-xmark text-muted" style="font-size: 0.95rem;"></i></span>
                             <div>
                                 <strong class="text-ink">Nghe thụ động, thiếu phản xạ:</strong>
-                                Chỉ nhìn mặt chữ rồi bấm chọn trắc nghiệm A/B/C. Khi người bản xứ nói trong thực tế thì tai không bắt kịp âm thanh.
+                                Chỉ chọn trắc nghiệm A/B/C. Khi người bản xứ nói thực tế thì tai không bắt kịp âm thanh.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-xmark text-muted mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-xmark text-muted" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">Gõ sai không ai sửa lỗi:</strong>
-                                Không phân biệt được 4 thanh điệu Pinyin hoặc không quen gõ bộ gõ chữ Hán, dẫn đến việc gõ nhầm từ đồng âm liên tục.
+                                <strong class="text-ink">Gõ sai không ai sửa:</strong>
+                                Dễ nhầm lẫn 4 thanh điệu Pinyin hoặc gõ sai chữ Hán đồng âm liên tục mà không hay biết.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-xmark text-muted mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-xmark text-muted" style="font-size: 0.95rem;"></i></span>
                             <div>
                                 <strong class="text-ink">Từ vựng rời rạc, thiếu ngữ cảnh:</strong>
-                                Học từng từ đơn côi không có câu ví dụ thực tế. Khi cần nói hoặc viết bài thi thì lúng túng không biết ghép câu ra sao.
+                                Học từng từ đơn côi không có câu ví dụ thực tế. Khi cần nói hoặc viết bài thi thì lúng túng.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-xmark text-muted mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-xmark text-muted" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">Lãng phí thời gian và tiền bạc:</strong>
-                                Nhiều ứng dụng tính phí gia hạn đắt đỏ hàng tháng nhưng chỉ có chức năng trắc nghiệm cơ bản lặp đi lặp lại.
+                                <strong class="text-ink">Chi phí đắt đỏ:</strong>
+                                Nhiều ứng dụng thu phí gia hạn cao nhưng chỉ có các tính năng trắc nghiệm cơ bản lặp lại.
                             </div>
                         </li>
                     </ul>
 
-                    <div class="mt-6 p-3 rounded-xl text-center" style="background: rgba(232, 226, 216, 0.45); border: 1px solid var(--border); font-size: 0.85rem; color: var(--muted-foreground);">
+                    <div class="mt-5 p-3 rounded-xl text-center" style="background: rgba(232, 226, 216, 0.45); border: 1px solid var(--border); font-size: 0.825rem; color: var(--muted-foreground);">
                         Hậu quả: <em>Mất động lực sau 2 tuần, sợ chữ Hán, nghe nói kém tự tin.</em>
                     </div>
                 </div>
 
                 <!-- Right Column: Đột phá cùng HonziGo -->
-                <div class="card p-6 shadow-lift" style="border: 1.5px solid var(--primary); background: #ffffff; border-radius: var(--radius-xl); display: flex; flex-direction: column; position: relative;">
-                    <div style="position: absolute; top: -12px; right: 20px; background: var(--primary); color: #ffffff; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 2px 8px rgba(194, 59, 43, 0.25);">
+                <div class="card p-5 shadow-lift d-flex flex-column h-100" style="border: 1.5px solid var(--primary); background: #ffffff; border-radius: var(--radius-xl); position: relative;">
+                    <div style="position: absolute; top: -11px; right: 1.25rem; background: var(--primary); color: #ffffff; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 2px 8px rgba(194, 59, 43, 0.25);">
                         <i class="fa-solid fa-star me-1" style="font-size: 0.65rem;"></i> Khuyên Dùng
                     </div>
 
-                    <div class="d-flex align-items-center gap-3 pb-4 mb-5" style="border-bottom: 1px solid rgba(194, 59, 43, 0.15);">
-                        <span style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.25rem;">
+                    <div class="d-flex align-items-center gap-3 pb-3 mb-4" style="border-bottom: 1px solid rgba(194, 59, 43, 0.15);">
+                        <span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.15rem; flex-shrink: 0;">
                             <i class="fa-solid fa-circle-check text-primary"></i>
                         </span>
                         <div>
-                            <h3 class="fw-bold text-ink mb-0" style="font-size: 1.2rem;">Giải Pháp Đột Phá Tại HonziGo</h3>
-                            <span class="text-primary fw-semibold" style="font-size: 0.825rem;">Công nghệ .NET 9 + Thuật toán SRS + Dictation</span>
+                            <h3 class="fw-bold text-ink mb-0" style="font-size: 1.15rem;">Giải Pháp Đột Phá Tại HonziGo</h3>
+                            <span class="text-primary fw-semibold" style="font-size: 0.8rem;">Công nghệ .NET 9 + Thuật toán SRS + Dictation</span>
                         </div>
                     </div>
 
-                    <ul class="d-flex flex-column gap-4 text-ink mb-auto" style="list-style: none; padding-left: 0; font-size: 0.925rem;">
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                    <ul class="d-flex flex-column gap-3.5 text-ink mb-auto" style="list-style: none; padding-left: 0; font-size: 0.885rem; line-height: 1.55;">
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-check text-primary" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">Ghi nhớ vĩnh viễn với SRS Leitner 5 Hộp:</strong>
-                                Hệ thống tự động tính toán "thời điểm vàng" sắp quên (1 → 3 → 7 → 14 → 30 ngày) để nhắc ôn tập, chuyển hóa từ vựng vào trí nhớ dài hạn.
+                                <strong class="text-ink">Ghi nhớ vĩnh viễn với SRS 5 Hộp:</strong>
+                                Hệ thống tự động tính "thời điểm vàng" sắp quên (1 → 3 → 7 → 14 → 30 ngày) để chuyển vào trí nhớ dài hạn.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-check text-primary" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">Đột phá Luyện nghe chép chính tả (Dictation):</strong>
-                                Rèn luyện đôi tai phản xạ trực tiếp, bắt buộc não bộ chuyển hóa âm thanh nghe được thành mặt chữ Hán và gõ lại chuẩn xác.
+                                <strong class="text-ink">Luyện nghe chép chính tả (Dictation):</strong>
+                                Rèn đôi tai phản xạ trực tiếp, bắt buộc não bộ chuyển hóa âm thanh nghe được thành mặt chữ Hán chuẩn xác.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-check text-primary" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">Thuật toán Diffing ký tự chỉ ra ngay chỗ sai:</strong>
-                                So khớp từng ký tự bạn vừa gõ với đáp án chuẩn, tô đỏ các ký tự sai/thiếu thanh điệu giúp bạn khắc phục lỗi tức thì.
+                                <strong class="text-ink">Thuật toán Diffing ký tự chỉ ra lỗi sai:</strong>
+                                So khớp từng ký tự gõ vào với đáp án chuẩn, tô đỏ các ký tự sai/thiếu thanh điệu giúp bạn sửa tức thì.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-check text-primary" style="font-size: 0.95rem;"></i></span>
                             <div>
-                                <strong class="text-ink">480+ Từ vựng chuẩn HSK 1 - 6 kèm ngữ cảnh thực tế:</strong>
-                                100% từ vựng có phiên âm chuẩn, câu ví dụ đời sống, dịch nghĩa trọn vẹn và phát âm giọng đọc bản xứ.
+                                <strong class="text-ink">480+ Từ vựng HSK kèm ngữ cảnh thực tế:</strong>
+                                100% từ vựng có phiên âm chuẩn, câu ví dụ đời sống, dịch nghĩa trọn vẹn và phát âm giọng bản xứ.
                             </div>
                         </li>
-                        <li class="d-flex gap-3">
-                            <i class="fa-solid fa-check text-primary mt-1" style="font-size: 1rem; flex-shrink: 0;"></i>
+                        <li class="d-flex align-items-start gap-2.5">
+                            <span class="comp-icon-col"><i class="fa-solid fa-check text-primary" style="font-size: 0.95rem;"></i></span>
                             <div>
                                 <strong class="text-ink">Tốc độ cao & Lưu trữ tiến độ trọn đời:</strong>
-                                Xây dựng trên nền tảng C# .NET 9 hiện đại, tải trang trong 0.1 giây, đồng bộ lịch sử bài làm và biểu đồ phân tích cá nhân.
+                                Xây dựng trên nền tảng .NET 9 hiện đại, tải trang trong 0.1s, đồng bộ bài làm và báo cáo phân tích cá nhân.
                             </div>
                         </li>
                     </ul>
 
-                    <div class="mt-6 p-3 rounded-xl text-center" style="background: #faf8f5; border: 1px solid rgba(194, 59, 43, 0.2); font-size: 0.85rem; color: var(--primary); font-weight: 600;">
+                    <div class="mt-5 p-3 rounded-xl text-center" style="background: #faf8f5; border: 1px solid rgba(194, 59, 43, 0.2); font-size: 0.825rem; color: var(--primary); font-weight: 600;">
                         Kết quả: <em>Nhớ từ vựng gấp 3 lần, tự tin nghe nói và đạt điểm cao trong các kỳ thi HSK!</em>
                     </div>
                 </div>
@@ -506,71 +452,79 @@
 
             <!-- 4 Core Value Pillars -->
             <div class="mt-12">
-                <h3 class="text-center text-ink fw-bold mb-8" style="font-size: 1.4rem;">
+                <h3 class="text-center text-ink fw-bold mb-6" style="font-size: 1.35rem;">
                     4 Lợi Thế Cạnh Tranh Giúp HonziGo Trở Thành Lựa Chọn Số 1
                 </h3>
 
                 <div class="d-grid sm-grid-cols-2 lg-grid-cols-4 gap-4">
-                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-start" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
-                        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.35rem; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-hourglass-half"></i>
+                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-between" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
+                        <div>
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                            <h4 class="fw-bold text-ink" style="font-size: 1.05rem; margin-bottom: 0.5rem;">Tiết Kiệm 80% Thời Gian</h4>
+                            <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.55;">
+                                Không cần lật lại cả nghìn từ vựng. Thuật toán Spaced Repetition chỉ lọc đúng những từ bạn sắp quên để ôn tập hàng ngày.
+                            </p>
                         </div>
-                        <h4 class="fw-bold text-ink" style="font-size: 1.05rem;">Tiết Kiệm 80% Thời Gian</h4>
-                        <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem; line-height: 1.55;">
-                            Không cần lật lại cả nghìn từ vựng. Thuật toán Spaced Repetition chỉ lọc đúng những từ bạn sắp quên để học lại trong ngày.
-                        </p>
                     </div>
 
-                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-start" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
-                        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.35rem; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-gauge-high"></i>
+                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-between" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
+                        <div>
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <h4 class="fw-bold text-ink" style="font-size: 1.05rem; margin-bottom: 0.5rem;">Nghe Đa Tốc Độ 0.5x - 1.0x</h4>
+                            <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.55;">
+                                Tùy chỉnh phát âm 0.5x cho người mới bắt đầu, 0.75x để nghe rõ thanh điệu, hoặc 1.0x chuẩn tốc độ người bản xứ.
+                            </p>
                         </div>
-                        <h4 class="fw-bold text-ink" style="font-size: 1.05rem;">Nghe Đa Tốc Độ 0.5x - 1.0x</h4>
-                        <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem; line-height: 1.55;">
-                            Tùy chỉnh phát âm chậm rãi 0.5x cho người mới bắt đầu, 0.75x để nghe rõ thanh điệu, hoặc 1.0x chuẩn tốc độ người bản xứ.
-                        </p>
                     </div>
 
-                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-start" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
-                        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.35rem; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-chart-line"></i>
+                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-between" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
+                        <div>
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <h4 class="fw-bold text-ink" style="font-size: 1.05rem; margin-bottom: 0.5rem;">Báo Cáo Tiến Độ Chi Tiết</h4>
+                            <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.55;">
+                                Theo dõi chính xác số từ Đã thuộc / Đang học / Hay sai ở từng cấp độ HSK, kèm lịch sử kiểm tra và tỷ lệ gõ đúng.
+                            </p>
                         </div>
-                        <h4 class="fw-bold text-ink" style="font-size: 1.05rem;">Báo Cáo Tiến Độ Chi Tiết</h4>
-                        <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem; line-height: 1.55;">
-                            Theo dõi chính xác số từ Đã thuộc / Đang học / Hay sai ở từng cấp độ HSK, lịch sử làm bài kiểm tra và tỷ lệ gõ đúng.
-                        </p>
                     </div>
 
-                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-start" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
-                        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.35rem; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-paintbrush"></i>
+                    <div class="card p-5 shadow-card d-flex flex-column h-100 justify-content-between" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);">
+                        <div>
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: rgba(194, 59, 43, 0.08); color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">
+                                <i class="fa-solid fa-brush"></i>
+                            </div>
+                            <h4 class="fw-bold text-ink" style="font-size: 1.05rem; margin-bottom: 0.5rem;">Cảm Hứng Thư Pháp Á Đông</h4>
+                            <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.55;">
+                                Giao diện mực tàu - son đỏ tinh tế, font chữ Hán chuẩn Noto Serif SC tạo cảm hứng thưởng lãm chữ đẹp mỗi khi mở ứng dụng.
+                            </p>
                         </div>
-                        <h4 class="fw-bold text-ink" style="font-size: 1.05rem;">Cảm Hứng Thư Pháp Á Đông</h4>
-                        <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem; line-height: 1.55;">
-                            Giao diện mực tàu - son đỏ tinh tế, font chữ Hán chuẩn Noto Serif SC tạo cảm hứng thưởng lãm chữ đẹp mỗi khi mở ứng dụng.
-                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- Call to Action Banner -->
-            <div class="mt-12 p-8 text-center shadow-lift text-white" style="background: linear-gradient(135deg, #c23b2b 0%, #a32b1e 100%); border-radius: var(--radius-2xl);">
-                <span class="badge" style="background: rgba(255, 255, 255, 0.18); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.8rem; padding: 0.35rem 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">
+            <div class="mt-12 cta-banner text-center shadow-lift text-white" style="background: linear-gradient(135deg, #c23b2b 0%, #a32b1e 100%); border-radius: var(--radius-2xl);">
+                <span class="badge" style="background: rgba(255, 255, 255, 0.18); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.775rem; padding: 0.35rem 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
                     Bắt đầu hoàn toàn miễn phí
                 </span>
-                <h3 class="fw-extrabold text-white mt-3" style="font-size: 2rem;">
+                <h3 class="fw-extrabold text-white mt-3" style="font-size: 1.9rem; line-height: 1.25;">
                     Sẵn Sàng Chinh Phục Tiếng Trung Cùng HonziGo?
                 </h3>
-                <p class="mx-auto mt-2 text-white" style="max-width: 600px; opacity: 0.92; font-size: 1rem;">
+                <p class="mx-auto mt-2 text-white" style="max-width: 600px; opacity: 0.92; font-size: 0.95rem; line-height: 1.55;">
                     Hơn 480 từ vựng HSK 1 - 6, bài tập luyện nghe chép chính tả và thuật toán SRS thông minh đang chờ đón bạn.
                 </p>
                 <div class="mt-6 d-flex flex-wrap justify-content-center gap-3">
-                    <a asp-controller="Listening" asp-action="Index" class="btn btn-lg shadow-lift" style="background: #ffffff; color: var(--primary); font-weight: 700; border: 1px solid #ffffff;"
+                    <a asp-controller="Listening" asp-action="Index" class="btn btn-lg shadow-lift" style="background: #ffffff; color: var(--primary); font-weight: 700; border: 1.5px solid #ffffff; padding: 0.7rem 1.5rem;"
                        data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
                        data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Luyện nghe chép chính tả" : null)">
                         <i class="fa-solid fa-headphones me-2"></i> Trải nghiệm Luyện nghe ngay
                     </a>
-                    <a asp-controller="Flashcard" asp-action="Index" class="btn btn-outline-white btn-lg shadow-lift"
+                    <a asp-controller="Flashcard" asp-action="Index" class="btn btn-outline-white btn-lg shadow-lift" style="padding: 0.7rem 1.5rem;"
                        data-require-auth="@(User.Identity?.IsAuthenticated != true ? "true" : null)"
                        data-feature-name="@(User.Identity?.IsAuthenticated != true ? "Flashcard 3D" : null)">
                         <i class="fa-solid fa-layer-group me-2"></i> Lật Flashcard 3D

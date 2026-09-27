@@ -251,6 +251,13 @@ img {
   .sm-block { display: block !important; }
 }
 
+/* Responsive visibility & breakpoints */
+.mobile-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (min-width: 768px) {
   .md-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .md-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -261,6 +268,31 @@ img {
 @media (min-width: 1024px) {
   .lg-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lg-grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .lg-flex { display: flex !important; }
+  .lg-hidden { display: none !important; }
+
+  /* Navbar desktop display at >= 1024px */
+  .main-nav {
+    display: flex !important;
+  }
+  .mobile-menu-btn,
+  #mobileMenuToggle,
+  #mobileMenuToggle.md-hidden {
+    display: none !important;
+  }
+}
+
+/* Ẩn navbar và hiện hamburger dưới 1024px để không bao giờ vỡ menu */
+@media (max-width: 1023.98px) {
+  .main-nav,
+  .main-nav.md-flex {
+    display: none !important;
+  }
+  .mobile-menu-btn,
+  #mobileMenuToggle,
+  #mobileMenuToggle.md-hidden {
+    display: inline-flex !important;
+  }
 }
 
 /* ---- Spacing ---- */
@@ -313,9 +345,22 @@ img {
 .py-6 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
 .py-8 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
 .py-10 { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+.py-12 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
 .py-14 { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
 .py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
 .py-20 { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+
+/* Responsive Section Padding: py-12 on desktop, py-8 on mobile */
+.home-section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+@media (max-width: 767.98px) {
+  .home-section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
 
 /* ---- Sticky Header & Navbar ---- */
 .site-header {
@@ -373,6 +418,8 @@ img {
   align-items: center;
   gap: 0.25rem;
   margin-left: 1.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-link-item {
@@ -383,6 +430,8 @@ img {
   color: var(--muted-foreground);
   transition: background-color 0.15s, color 0.15s;
   text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .nav-link-item:hover {
   background-color: var(--secondary);
@@ -965,36 +1014,146 @@ textarea.form-control {
   display: block;
 }
 
-/* ---- Modal ---- */
+/* ---- Modal Architecture (Modern & Mobile-First) ---- */
 .modal-backdrop {
   display: none;
   position: fixed;
   inset: 0;
-  background-color: rgba(31, 28, 29, 0.4);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(31, 28, 29, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 10000;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 1rem;
+  box-sizing: border-box;
 }
 .modal-backdrop.show {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-dialog {
   background-color: var(--card);
   border-radius: var(--radius-2xl);
   border: 1px solid var(--border);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-  max-width: 480px;
+  box-shadow: 0 25px 60px -15px rgba(31, 28, 29, 0.35);
+  max-width: 580px;
   width: 100%;
-  padding: 1.75rem;
+  max-height: calc(100dvh - 2rem);
+  max-height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: auto;
+  position: relative;
   animation: modalScaleIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  box-sizing: border-box;
+}
+
+.modal-dialog.p-0 {
+  padding: 0 !important;
+}
+
+.modal-header-fixed {
+  flex-shrink: 0;
+  background: #faf8f5;
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 1.75rem 1.15rem 1.75rem;
+  position: relative;
+}
+
+.modal-body-scrollable {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 1.25rem 1.75rem;
+}
+
+.modal-body-scrollable::-webkit-scrollbar {
+  width: 5px;
+}
+.modal-body-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-body-scrollable::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+.modal-body-scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+.modal-footer-fixed {
+  flex-shrink: 0;
+  background: #faf8f5;
+  border-top: 1px solid var(--border);
+  padding: 1rem 1.75rem;
+}
+
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 50%;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+  font-size: 0.95rem;
+}
+.modal-close-btn:hover {
+  background: var(--border);
+  color: var(--ink);
+  transform: rotate(90deg);
 }
 
 @keyframes modalScaleIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile Responsiveness for Modal (< 640px) */
+@media (max-width: 640px) {
+  .modal-backdrop {
+    padding: 0.5rem;
+  }
+  .modal-dialog {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: calc(100dvh - 1rem);
+    max-height: calc(100vh - 1rem);
+    border-radius: var(--radius-xl);
+  }
+  .modal-header-fixed {
+    padding: 1rem 1.25rem !important;
+  }
+  .modal-header-fixed h2,
+  .modal-header-fixed h3,
+  .modal-header-fixed .modal-title {
+    font-size: 1.25rem !important;
+    line-height: 1.35 !important;
+  }
+  .modal-header-fixed p {
+    font-size: 0.825rem !important;
+    line-height: 1.45 !important;
+  }
+  .modal-body-scrollable {
+    padding: 1rem 1.25rem !important;
+  }
+  .modal-footer-fixed {
+    padding: 0.875rem 1.25rem !important;
+  }
 }
 
 /* ---- Audio Wave / Speaker button ---- */
@@ -1023,3 +1182,74 @@ textarea.form-control {
   font-size: 0.875rem;
   color: var(--muted-foreground);
 }
+
+/* ---- Homepage Specific Components ---- */
+.leitner-box-row {
+  background: #faf8f5;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.65rem 0.85rem;
+  transition: background-color 0.15s ease;
+}
+.leitner-box-row:hover {
+  background: #f4efe9;
+}
+.leitner-badge {
+  min-width: 58px;
+  text-align: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.leitner-tag {
+  font-size: 0.775rem;
+  padding: 0.35rem 0.65rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 105px;
+  text-align: center;
+  justify-content: center;
+  font-weight: 600;
+}
+@media (max-width: 576px) {
+  .leitner-box-row {
+    padding: 0.5rem 0.6rem !important;
+    gap: 0.4rem !important;
+  }
+  .leitner-badge {
+    min-width: 50px !important;
+    font-size: 0.725rem !important;
+    padding: 0.25rem 0.35rem !important;
+  }
+  .leitner-tag {
+    min-width: 88px !important;
+    font-size: 0.725rem !important;
+    padding: 0.25rem 0.45rem !important;
+  }
+  .leitner-title {
+    font-size: 0.825rem !important;
+  }
+  .leitner-desc {
+    font-size: 0.7rem !important;
+  }
+}
+
+.comp-icon-col {
+  width: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.cta-banner {
+  padding: 2.25rem 1.5rem;
+}
+@media (min-width: 640px) {
+  .cta-banner {
+    padding: 3rem 2.5rem;
+  }
+}
+

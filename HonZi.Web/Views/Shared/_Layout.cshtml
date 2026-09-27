@@ -79,7 +79,7 @@
             </a>
 
             <!-- Desktop Navigation -->
-            <nav class="main-nav md-flex">
+            <nav class="main-nav">
                 <a asp-controller="Home" asp-action="Index" 
                    class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
                     Trang chủ
@@ -161,7 +161,7 @@
 
                 <!-- Mobile Hamburger Toggle -->
                 <button type="button" 
-                        class="btn btn-ghost btn-icon md-hidden" 
+                        class="btn btn-ghost btn-icon mobile-menu-btn" 
                         id="mobileMenuToggle" 
                         aria-label="Menu"
                         onclick="toggleMobileMenu()">

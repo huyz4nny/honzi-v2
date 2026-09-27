@@ -16,7 +16,7 @@
         </a>
 
         <!-- Desktop Navigation -->
-        <nav class="main-nav md-flex">
+        <nav class="main-nav">
             <a href="${pageContext.request.contextPath}/index.jsp" 
                class="nav-link-item ${reqPath eq '/' or reqPath eq '/index.jsp' ? 'active' : ''}">
                 Trang chủ
@@ -77,7 +77,7 @@
 
             <!-- Mobile Hamburger Toggle -->
             <button type="button" 
-                    class="btn btn-ghost btn-icon md-hidden" 
+                    class="btn btn-ghost btn-icon mobile-menu-btn" 
                     id="mobileMenuToggle" 
                     aria-label="Menu"
                     onclick="toggleMobileMenu()">
