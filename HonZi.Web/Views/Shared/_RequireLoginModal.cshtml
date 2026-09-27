@@ -1,47 +1,48 @@
 @if (User.Identity?.IsAuthenticated != true)
 {
     <!-- Modal Yêu cầu đăng nhập khi chưa đăng nhập mà bấm vào các tính năng -->
-    <div id="requireLoginModalBackdrop" class="modal-backdrop" style="background-color: rgba(15, 23, 42, 0.65); backdrop-filter: blur(8px); z-index: 10000;" onclick="handleRequireLoginBackdropClick(event)">
-        <div class="modal-dialog" style="max-width: 480px; width: 92%; padding: 0; border-radius: 1.5rem; overflow: hidden; position: relative; border: 1px solid rgba(194, 59, 43, 0.25); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35); background: #ffffff;">
+    <div id="requireLoginModalBackdrop" class="modal-backdrop" style="background-color: rgba(31, 28, 29, 0.45); backdrop-filter: blur(6px); z-index: 10000;" onclick="handleRequireLoginBackdropClick(event)">
+        <div class="modal-dialog" style="max-width: 480px; width: 92%; padding: 0; border-radius: var(--radius-2xl); overflow: hidden; position: relative; border: 1px solid var(--border); box-shadow: 0 25px 60px -15px rgba(31, 28, 29, 0.25); background: #ffffff;">
             
-            <!-- Header Banner with Hanzi Motif -->
-            <div style="background: linear-gradient(135deg, #c23b2b 0%, #991b1b 100%); color: #ffffff; padding: 2rem 2rem 1.5rem; position: relative; overflow: hidden; text-align: center;">
-                <!-- Watermark character -->
-                <div style="position: absolute; right: 1rem; bottom: -1rem; font-family: var(--font-hanzi, 'Noto Serif SC', serif); font-size: 6.5rem; font-weight: 900; color: rgba(255, 255, 255, 0.08); line-height: 1; pointer-events: none; user-select: none;">
-                    学
+            <!-- Close Button -->
+            <button type="button" onclick="closeRequireLoginModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: transparent; border: none; color: var(--muted-foreground); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; z-index: 2;" onmouseover="this.style.background='var(--secondary)'; this.style.color='var(--ink)';" onmouseout="this.style.background='transparent'; this.style.color='var(--muted-foreground)';" title="Đóng" aria-label="Đóng">
+                <i class="fa-solid fa-xmark" style="font-size: 1.1rem;"></i>
+            </button>
+
+            <!-- Watermark character -->
+            <div style="position: absolute; right: 1rem; top: 0.5rem; font-family: var(--font-hanzi, 'Noto Serif SC', serif); font-size: 6.5rem; font-weight: 900; color: var(--ink); opacity: 0.04; line-height: 1; pointer-events: none; user-select: none;">
+                学
+            </div>
+
+            <!-- Top Header & Icon -->
+            <div style="padding: 1.75rem 2rem 0.5rem; text-align: center; position: relative;">
+                <div style="background: rgba(194, 59, 43, 0.08); color: var(--primary); border: 1px solid rgba(194, 59, 43, 0.18); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 1.5rem auto 0.75rem;">
+                    <i class="fa-solid fa-lock"></i>
                 </div>
 
-                <button type="button" onclick="closeRequireLoginModal()" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255, 255, 255, 0.2); border: none; color: #ffffff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;" title="Đóng" aria-label="Đóng">
-                    <i class="fa-solid fa-xmark" style="font-size: 1rem;"></i>
-                </button>
-
-                <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px); margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
-                    <i class="fa-solid fa-lock text-white"></i>
-                </div>
-
-                <h3 class="text-white fw-extrabold mb-1" style="font-size: 1.4rem; letter-spacing: -0.01em;">
+                <h3 class="fw-extrabold text-ink mb-1.5" style="font-size: 1.35rem; letter-spacing: -0.01em;">
                     Yêu Cầu Đăng Nhập
                 </h3>
-                <p style="color: rgba(255, 255, 255, 0.92); font-size: 0.9rem; margin-bottom: 0; line-height: 1.45;" id="requireLoginDesc">
+                <p class="text-muted mb-0" style="font-size: 0.9rem; line-height: 1.5; padding: 0 0.5rem;" id="requireLoginDesc">
                     Bạn cần đăng nhập tài khoản để sử dụng tính năng này!
                 </p>
             </div>
 
-            <!-- Modal Content -->
-            <div style="padding: 1.75rem 2rem 1.5rem;">
-                <div class="p-3 rounded-xl mb-4 d-flex align-items-start gap-3" style="background: #fdf2f0; border: 1px solid rgba(194, 59, 43, 0.2);">
-                    <i class="fa-solid fa-circle-exclamation text-primary mt-1" style="font-size: 1.1rem; flex-shrink: 0;"></i>
-                    <div style="font-size: 0.875rem; color: #4b5563; line-height: 1.5;">
-                        Các tính năng <strong>Luyện nghe chép chính tả</strong>, <strong>Flashcard 3D</strong>, <strong>Kiểm tra trắc nghiệm</strong>, <strong>Kho từ vựng</strong> và <strong>Thống kê tiến độ</strong> yêu cầu tài khoản học viên để lưu lại kết quả và tính chu kỳ ghi nhớ SRS.
+            <!-- Modal Content Body -->
+            <div style="padding: 1.25rem 2rem 1.75rem;">
+                <div class="p-3.5 rounded-xl mb-4 d-flex align-items-start gap-2.5" style="background: #faf8f5; border: 1px solid var(--border);">
+                    <i class="fa-solid fa-circle-info text-primary mt-0.5" style="font-size: 1.05rem; flex-shrink: 0;"></i>
+                    <div style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.55;">
+                        Các tính năng <strong class="text-ink">Luyện nghe chép chính tả</strong>, <strong class="text-ink">Flashcard 3D</strong>, <strong class="text-ink">Kiểm tra trắc nghiệm</strong>, <strong class="text-ink">Kho từ vựng</strong> và <strong class="text-ink">Thống kê tiến độ</strong> yêu cầu tài khoản học viên để lưu lại kết quả và tính chu kỳ ghi nhớ SRS.
                     </div>
                 </div>
 
                 <div class="d-grid gap-2.5">
-                    <a id="requireLoginDirectBtn" href="/Auth/Login" class="btn btn-primary btn-lg w-full shadow-lift" style="font-size: 1rem; font-weight: 700; padding: 0.8rem 1rem;">
+                    <a id="requireLoginDirectBtn" href="/Auth/Login" class="btn btn-primary btn-lg w-full shadow-lift" style="font-size: 0.95rem; font-weight: 700; padding: 0.75rem 1rem;">
                         <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Đăng nhập ngay
                     </a>
                     
-                    <a id="requireRegisterDirectBtn" href="/Auth/Register" class="btn btn-outline btn-md w-full" style="font-size: 0.9rem; padding: 0.65rem 1rem;">
+                    <a id="requireRegisterDirectBtn" href="/Auth/Register" class="btn btn-outline btn-md w-full" style="font-size: 0.9rem; font-weight: 600; padding: 0.65rem 1rem;">
                         <i class="fa-solid fa-user-plus me-2"></i> Tạo tài khoản mới miễn phí
                     </a>
 
@@ -72,7 +73,7 @@
             var descElem = document.getElementById('requireLoginDesc');
             if (descElem) {
                 if (featureName) {
-                    descElem.innerHTML = 'Bạn cần đăng nhập tài khoản để sử dụng tính năng <strong>' + featureName + '</strong>!';
+                    descElem.innerHTML = 'Bạn cần đăng nhập tài khoản để sử dụng tính năng <strong class="text-ink">' + featureName + '</strong>!';
                 } else {
                     descElem.textContent = 'Bạn cần đăng nhập tài khoản để sử dụng tính năng này!';
                 }
