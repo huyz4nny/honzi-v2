@@ -13,7 +13,7 @@
                     汉
                 </div>
                 <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.65rem;">
-                    Đăng nhập HanziGo
+                    Đăng nhập HonziGo
                 </h1>
                 <p class="text-muted mt-1" style="font-size: 0.875rem;">
                     Lưu tiến độ, streak và lịch ôn tập của bạn.

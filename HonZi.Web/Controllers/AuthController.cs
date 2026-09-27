@@ -166,7 +166,7 @@ namespace HonZi.Web.Controllers
             HttpContext.Session.SetInt32("ResetUserId", user.UserId);
 
             // In OTP trực tiếp ra console như phiên bản gốc
-            Console.WriteLine($"[HanziGo] >>> Mã OTP khôi phục mật khẩu của {user.Username} ({user.Email}) là: {otp} <<<");
+            Console.WriteLine($"[HonziGo] >>> Mã OTP khôi phục mật khẩu của {user.Username} ({user.Email}) là: {otp} <<<");
 
             TempData["InfoMessage"] = $"Mã OTP đã được gửi đến email (và in trên console máy chủ): {otp}";
             return RedirectToAction(nameof(VerifyOtp));

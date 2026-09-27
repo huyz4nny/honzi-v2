@@ -215,7 +215,7 @@ namespace HonZi.Web.Controllers
         public IActionResult DownloadTemplate()
         {
             var bytes = _excelService.GenerateSampleExcelTemplate();
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "HanziGo_Word_Template.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "HonziGo_Word_Template.xlsx");
         }
     }
 }

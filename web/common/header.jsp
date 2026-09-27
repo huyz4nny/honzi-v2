@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HanziGo — Học từ vựng tiếng Trung bằng flashcard</title>
+    <title>HonziGo — Học từ vựng tiếng Trung bằng flashcard</title>
     <meta name="description" content="Học từ vựng tiếng Trung theo cấp độ HSK 1-6 với flashcard, quiz và ôn tập ngắt quãng.">
     <link rel="icon" href="${pageContext.request.contextPath}/assets/favicon.ico" type="image/x-icon">
     

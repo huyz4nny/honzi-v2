@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <footer class="site-footer">
     <div class="container">
-        HanziGo · 每天一点点 — mỗi ngày một chút
+        HonziGo · 每天一点点 — mỗi ngày một chút
     </div>
 </footer>
 

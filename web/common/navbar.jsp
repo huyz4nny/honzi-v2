@@ -12,7 +12,7 @@
         <!-- Logo Brand -->
         <a href="${pageContext.request.contextPath}/index.jsp" class="brand-logo">
             <span class="logo-icon">汉</span>
-            <span class="logo-text">HanziGo</span>
+            <span class="logo-text">HonziGo</span>
         </a>
 
         <!-- Desktop Navigation -->
