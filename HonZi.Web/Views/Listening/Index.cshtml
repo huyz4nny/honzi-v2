@@ -1,0 +1,192 @@
+@model HonZi.Web.Models.ViewModels.ListeningIndexViewModel
+@{
+    ViewData["Title"] = "Luyện nghe tiếng Trung";
+}
+
+<div class="main-content py-10">
+    <div class="container container-md" style="max-width: 860px;">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <span class="badge badge-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider mb-2">
+                <i class="fa-solid fa-headphones me-1"></i> Tính năng mới
+            </span>
+            <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 2.25rem;">
+                Luyện Nghe & Chép Chính Tả
+            </h1>
+            <p class="text-muted mt-2" style="font-size: 1rem; max-width: 580px; margin-left: auto; margin-right: auto;">
+                Lắng nghe phát âm chuẩn giọng bản xứ, nhập lại chữ Hán hoặc Pinyin để rèn luyện thính giác và phản xạ từ vựng sắc bén.
+            </p>
+        </div>
+
+        <!-- Setup Form Card -->
+        <div class="card-plain shadow-card p-8 mb-8" style="background: #ffffff; border-radius: 16px;">
+            <form asp-action="Start" method="post" id="formListeningSetup">
+                <!-- 1. Chọn cấp độ HSK -->
+                <div class="mb-6">
+                    <label class="form-label fw-bold" style="font-size: 1.05rem;">
+                        <span class="text-primary me-1">1.</span> Chọn cấp độ HSK
+                    </label>
+                    <div class="d-grid grid-cols-3 sm-grid-cols-6 gap-2 mt-2">
+                        @for (int lvl = 1; lvl <= 6; lvl++)
+                        {
+                            <label class="btn btn-outline text-center p-3 hsk-radio-label @(lvl == Model.DefaultHskLevel ? "active border-primary text-primary fw-bold" : "")" 
+                                   style="cursor: pointer; border-radius: 10px;">
+                                <input type="radio" name="hskLevel" value="@lvl" @(lvl == Model.DefaultHskLevel ? "checked" : "") style="display: none;" onchange="updateHskSelection(this)" />
+                                <div style="font-size: 1.15rem; font-weight: 700;">HSK @lvl</div>
+                            </label>
+                        }
+                    </div>
+                </div>
+
+                <!-- 2. Chọn dạng bài tập (Exercise Type) -->
+                <div class="mb-6">
+                    <label class="form-label fw-bold" style="font-size: 1.05rem;">
+                        <span class="text-primary me-1">2.</span> Phạm vi nội dung luyện nghe
+                    </label>
+                    <div class="d-grid sm-grid-cols-2 gap-3 mt-2">
+                        <label class="card p-4 mode-card active" style="cursor: pointer; border: 2px solid var(--primary); border-radius: 12px;" onclick="selectExerciseType('Word', this)">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="radio" name="exerciseType" value="Word" checked style="accent-color: var(--primary); width: 1.2rem; height: 1.2rem;" />
+                                <div>
+                                    <div class="fw-bold text-ink" style="font-size: 1.05rem;">
+                                        <i class="fa-solid fa-font text-primary me-1"></i> Nghe từ vựng đơn lẻ
+                                    </div>
+                                    <p class="text-muted mt-1 mb-0" style="font-size: 0.825rem;">
+                                        Nghe phát âm từng từ HSK riêng biệt. Phù hợp củng cố nhớ từ vựng mới.
+                                    </p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="card p-4 mode-card" style="cursor: pointer; border: 2px solid #e2e8f0; border-radius: 12px;" onclick="selectExerciseType('Sentence', this)">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="radio" name="exerciseType" value="Sentence" style="accent-color: var(--primary); width: 1.2rem; height: 1.2rem;" />
+                                <div>
+                                    <div class="fw-bold text-ink" style="font-size: 1.05rem;">
+                                        <i class="fa-solid fa-comment-dots text-primary me-1"></i> Nghe câu ví dụ hoàn chỉnh
+                                    </div>
+                                    <p class="text-muted mt-1 mb-0" style="font-size: 0.825rem;">
+                                        Nghe cả câu giao tiếp trong đời sống. Luyện khả năng bắt từ và ngắt nghỉ câu.
+                                    </p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 3. Chọn chế độ nhập liệu (Input Mode) -->
+                <div class="mb-8">
+                    <label class="form-label fw-bold" style="font-size: 1.05rem;">
+                        <span class="text-primary me-1">3.</span> Bạn muốn gõ bằng chữ gì?
+                    </label>
+                    <div class="d-grid sm-grid-cols-2 gap-3 mt-2">
+                        <label class="card p-4 mode-card active" style="cursor: pointer; border: 2px solid var(--primary); border-radius: 12px;" onclick="selectInputMode('Hanzi', this)">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="radio" name="inputMode" value="Hanzi" checked style="accent-color: var(--primary); width: 1.2rem; height: 1.2rem;" />
+                                <div>
+                                    <div class="fw-bold text-ink" style="font-size: 1.05rem;">
+                                        <i class="fa-solid fa-keyboard text-primary me-1"></i> Gõ chữ Hán (Hanzi)
+                                    </div>
+                                    <p class="text-muted mt-1 mb-0" style="font-size: 0.825rem;">
+                                        Sử dụng bàn phím tiếng Trung gõ chữ Hán (vd: 你好). Rèn luyện ghi nhớ mặt chữ.
+                                    </p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="card p-4 mode-card" style="cursor: pointer; border: 2px solid #e2e8f0; border-radius: 12px;" onclick="selectInputMode('Pinyin', this)">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="radio" name="inputMode" value="Pinyin" style="accent-color: var(--primary); width: 1.2rem; height: 1.2rem;" />
+                                <div>
+                                    <div class="fw-bold text-ink" style="font-size: 1.05rem;">
+                                        <i class="fa-solid fa-spell-check text-primary me-1"></i> Gõ phiên âm (Pinyin)
+                                    </div>
+                                    <p class="text-muted mt-1 mb-0" style="font-size: 0.825rem;">
+                                        Gõ pinyin có dấu (nǐ hǎo), số thanh (ni3 hao3) hoặc không dấu. Tiện lợi cho người mới.
+                                    </p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Bắt đầu button -->
+                <button type="submit" class="btn btn-primary btn-lg w-full shadow-lift" style="font-size: 1.15rem; padding: 1rem;">
+                    <i class="fa-solid fa-play me-2"></i> Bắt đầu Luyện nghe ngay (10 câu)
+                </button>
+            </form>
+        </div>
+
+        <!-- Recent History -->
+        @if (Model.RecentHistory.Any())
+        {
+            <div class="card-plain shadow-card p-6" style="background: #ffffff; border-radius: 16px;">
+                <h3 class="fw-bold text-ink mb-4" style="font-size: 1.15rem;">
+                    <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Lịch sử luyện nghe gần đây
+                </h3>
+                <div class="table-responsive">
+                    <table class="table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0; text-align: left; font-size: 0.85rem; color: #64748b;">
+                                <th style="padding: 0.75rem;">Thời gian</th>
+                                <th style="padding: 0.75rem;">Cấp độ</th>
+                                <th style="padding: 0.75rem;">Nội dung</th>
+                                <th style="padding: 0.75rem;">Kiểu gõ</th>
+                                <th style="padding: 0.75rem;">Điểm số</th>
+                                <th style="padding: 0.75rem;">Độ chính xác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.RecentHistory)
+                            {
+                                <tr style="border-bottom: 1px solid #f1f5f9; font-size: 0.9rem;">
+                                    <td style="padding: 0.75rem;">@item.TakenAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td style="padding: 0.75rem;"><span class="badge badge-secondary">HSK @item.HskLevel</span></td>
+                                    <td style="padding: 0.75rem;">@(item.ExerciseType == "Sentence" ? "Câu ví dụ" : "Từ vựng")</td>
+                                    <td style="padding: 0.75rem;">@(item.InputMode == "Pinyin" ? "Pinyin" : "Chữ Hán")</td>
+                                    <td style="padding: 0.75rem; font-weight: bold; color: var(--primary);">@item.Score / @item.TotalQuestions</td>
+                                    <td style="padding: 0.75rem;">
+                                        <span class="badge @(item.AccuracyPercentage >= 80 ? "badge-primary" : "badge-secondary")">
+                                            @item.AccuracyPercentage%
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function updateHskSelection(radio) {
+    document.querySelectorAll('.hsk-radio-label').forEach(el => {
+        el.classList.remove('active', 'border-primary', 'text-primary', 'fw-bold');
+    });
+    radio.closest('.hsk-radio-label').classList.add('active', 'border-primary', 'text-primary', 'fw-bold');
+}
+
+function selectExerciseType(type, element) {
+    document.querySelectorAll('[name="exerciseType"]').forEach(r => {
+        r.checked = (r.value === type);
+    });
+    element.closest('.mb-6').querySelectorAll('.mode-card').forEach(c => {
+        c.style.borderColor = '#e2e8f0';
+    });
+    element.style.borderColor = 'var(--primary)';
+}
+
+function selectInputMode(mode, element) {
+    document.querySelectorAll('[name="inputMode"]').forEach(r => {
+        r.checked = (r.value === mode);
+    });
+    element.closest('.mb-8').querySelectorAll('.mode-card').forEach(c => {
+        c.style.borderColor = '#e2e8f0';
+    });
+    element.style.borderColor = 'var(--primary)';
+}
+</script>
+}

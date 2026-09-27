@@ -1,0 +1,294 @@
+@model HonZi.Web.Models.ViewModels.ListeningPracticeViewModel
+@{
+    ViewData["Title"] = $"Luyện nghe HSK {Model.HskLevel} — Câu {Model.CurrentIndex + 1}/{Model.TotalQuestions}";
+    var q = Model.CurrentQuestion;
+}
+
+<div class="main-content py-10">
+    <div class="container container-md" style="max-width: 760px;">
+        
+        <!-- Top Navigation & Progress Bar -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <a asp-action="Index" class="btn btn-ghost btn-sm" style="color: var(--text-muted); padding-left: 0;">
+                <i class="fa-solid fa-xmark me-1"></i> Thoát
+            </a>
+            
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge badge-secondary">HSK @Model.HskLevel</span>
+                <span class="badge badge-accent">@(Model.ExerciseType == "Sentence" ? "Nghe câu" : "Nghe từ")</span>
+                <span class="badge badge-primary">@(Model.InputMode == "Pinyin" ? "Gõ Pinyin" : "Gõ Chữ Hán")</span>
+            </div>
+
+            <span class="text-muted fw-bold" style="font-size: 0.9rem;">
+                Điểm: <span id="scoreBadge" class="text-primary fw-extrabold">@Model.CurrentScore</span>/@Model.TotalQuestions
+            </span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-container mb-6" style="height: 8px;">
+            <div class="progress-bar-fill" style="width: @((Model.CurrentIndex + 1) * 100.0 / Model.TotalQuestions)%;"></div>
+        </div>
+
+        <!-- Practice Main Card -->
+        <div class="card-plain shadow-card p-8 mb-6" style="background: #ffffff; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06);">
+            
+            <!-- Question Step Indicator -->
+            <div class="text-center text-muted mb-4" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                Câu hỏi @(Model.CurrentIndex + 1) / @Model.TotalQuestions
+            </div>
+
+            <!-- Audio Playing Center -->
+            <div class="text-center mb-8">
+                <div class="d-inline-flex flex-column align-items-center">
+                    <button type="button" 
+                            id="btnPlayAudio" 
+                            onclick="playCurrentAudio()" 
+                            class="btn btn-primary shadow-lift" 
+                            style="width: 5.5rem; height: 5.5rem; border-radius: 50%; font-size: 2rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; transition: transform 0.2s;">
+                        <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+                    </button>
+                    <span class="text-muted" style="font-size: 0.825rem;">
+                        Nhấn để nghe lại phát âm <i>(hoặc bấm phím <kbd style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: inherit;">Space</kbd>)</i>
+                    </span>
+                </div>
+
+                <!-- Speed Control Pills -->
+                <div class="d-flex justify-content-center align-items-center gap-2 mt-4">
+                    <span class="text-muted me-1" style="font-size: 0.8rem; font-weight: 600;">Tốc độ:</span>
+                    <button type="button" class="btn btn-sm btn-speed @(1.0 == 1.0 ? "active" : "")" data-speed="1.0" onclick="setSpeed(1.0, this)" style="border-radius: 20px; font-size: 0.8rem; padding: 0.25rem 0.75rem;">
+                        1.0x (Chuẩn)
+                    </button>
+                    <button type="button" class="btn btn-sm btn-speed" data-speed="0.75" onclick="setSpeed(0.75, this)" style="border-radius: 20px; font-size: 0.8rem; padding: 0.25rem 0.75rem;">
+                        0.75x (Chậm)
+                    </button>
+                    <button type="button" class="btn btn-sm btn-speed" data-speed="0.5" onclick="setSpeed(0.5, this)" style="border-radius: 20px; font-size: 0.8rem; padding: 0.25rem 0.75rem;">
+                        0.5x (Rất chậm)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Input Box & Submit -->
+            <div id="inputSection">
+                <form id="formAnswer" onsubmit="event.preventDefault(); submitAnswer();">
+                    <div class="form-group mb-3">
+                        <label class="form-label text-muted d-flex justify-content-between align-items-center" style="font-size: 0.875rem;">
+                            <span>Nhập nội dung bạn nghe được:</span>
+                            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleHint()" style="font-size: 0.8rem; color: var(--primary); padding: 0;">
+                                <i class="fa-regular fa-lightbulb me-1"></i> Xem gợi ý nghĩa
+                            </button>
+                        </label>
+                        
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-pen-nib icon-left text-muted"></i>
+                            <input type="text" 
+                                   id="userAnswerInput" 
+                                   class="form-control" 
+                                   placeholder="@(Model.InputMode == "Hanzi" ? "Gõ chữ Hán bạn nghe được..." : "Gõ Pinyin (vd: ni3 hao3 hoặc nǐ hǎo)...")" 
+                                   autocomplete="off" 
+                                   autofocus 
+                                   style="font-size: 1.25rem; font-weight: 600; padding: 0.85rem 1rem 0.85rem 2.75rem; border-radius: 12px;" />
+                        </div>
+                    </div>
+
+                    <!-- Hint Box (Toggled) -->
+                    <div id="hintBox" class="p-3 mb-4 rounded-xl bg-secondary" style="display: none; font-size: 0.875rem;">
+                        <i class="fa-solid fa-circle-info text-primary me-1"></i>
+                        Gợi ý nghĩa tiếng Việt: <strong>@q.Meaning</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <span class="text-muted" style="font-size: 0.8rem;">
+                            Nhấn <kbd style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e1;">Enter</kbd> để kiểm tra
+                        </span>
+                        <button type="submit" id="btnSubmitAnswer" class="btn btn-primary btn-lg px-6 shadow-lift" style="border-radius: 12px;">
+                            <i class="fa-solid fa-check me-1"></i> Kiểm tra đáp án
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Feedback & Diff Section (Appears after submit) -->
+            <div id="feedbackSection" style="display: none;" class="mt-6 pt-6" style="border-top: 1px dashed #e2e8f0;">
+                
+                <!-- Feedback Alert Banner -->
+                <div id="feedbackAlert" class="alert-box mb-4" style="padding: 1rem; border-radius: 12px; font-weight: 600;">
+                    <i id="feedbackIcon" class="fa-solid me-2"></i>
+                    <span id="feedbackText"></span>
+                </div>
+
+                <!-- Diff Tokens Result Display -->
+                <div class="p-4 rounded-xl mb-4 text-center" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <div class="text-muted mb-2" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Chi tiết ký tự đã gõ:
+                    </div>
+                    <div id="diffTokensContainer" class="d-flex flex-wrap justify-content-center gap-1 mb-3">
+                        <!-- Tokens injected here -->
+                    </div>
+
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 0.75rem; margin-top: 0.5rem;">
+                        <div class="font-hanzi text-ink fw-bold" id="displayTargetHanzi" style="font-size: 2rem;"></div>
+                        <div class="text-primary fw-bold" id="displayTargetPinyin" style="font-size: 1.25rem;"></div>
+                        <div class="text-muted mt-1" id="displayMeaning" style="font-size: 0.95rem;"></div>
+                    </div>
+                </div>
+
+                <!-- Next Button -->
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" id="btnNextQuestion" onclick="goToNextQuestion()" class="btn btn-primary btn-lg shadow-lift px-6" style="border-radius: 12px;">
+                        Tiếp theo <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+var audioText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(q.AudioText));
+var audioUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(q.AudioUrl ?? ""));
+var questionIndex = @Model.CurrentIndex;
+var isChecked = false;
+var currentSpeed = 1.0;
+var nextQuestionUrl = '@(Model.CurrentIndex + 1 < Model.TotalQuestions ? Url.Action("Practice", new { index = Model.CurrentIndex + 1 }) : Url.Action("Result"))';
+
+// Phát âm thanh của câu hỏi hiện tại
+function playCurrentAudio() {
+    if (audioUrl && audioUrl.trim().length > 0) {
+        var audio = new Audio(audioUrl);
+        audio.playbackRate = currentSpeed;
+        audio.play().catch(function() {
+            speak(audioText, currentSpeed);
+        });
+    } else {
+        speak(audioText, currentSpeed);
+    }
+}
+
+// Thiết lập tốc độ đọc
+function setSpeed(speed, button) {
+    currentSpeed = speed;
+    document.querySelectorAll('.btn-speed').forEach(b => {
+        b.classList.remove('active', 'btn-primary');
+        b.classList.add('btn-outline');
+    });
+    button.classList.remove('btn-outline');
+    button.classList.add('active', 'btn-primary');
+    playCurrentAudio();
+}
+
+// Bật/tắt gợi ý
+function toggleHint() {
+    var box = document.getElementById('hintBox');
+    box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+}
+
+// Nộp bài và chấm điểm
+function submitAnswer() {
+    if (isChecked) {
+        goToNextQuestion();
+        return;
+    }
+
+    var inputEl = document.getElementById('userAnswerInput');
+    var userAnswer = inputEl.value.trim();
+
+    fetch('@Url.Action("CheckAnswer", "Listening")', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            questionIndex: questionIndex,
+            userAnswer: userAnswer
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            alert(data.message || 'Đã có lỗi xảy ra');
+            return;
+        }
+
+        isChecked = true;
+        inputEl.disabled = true;
+        document.getElementById('btnSubmitAnswer').style.display = 'none';
+
+        // Cập nhật điểm
+        document.getElementById('scoreBadge').innerText = data.currentScore;
+
+        // Hiển thị feedback
+        var feedbackSection = document.getElementById('feedbackSection');
+        var feedbackAlert = document.getElementById('feedbackAlert');
+        var feedbackIcon = document.getElementById('feedbackIcon');
+        var feedbackText = document.getElementById('feedbackText');
+
+        feedbackSection.style.display = 'block';
+        feedbackText.innerText = data.feedbackMessage;
+
+        if (data.isCorrect && !data.isPartial) {
+            feedbackAlert.style.backgroundColor = '#ecfdf5';
+            feedbackAlert.style.color = '#065f46';
+            feedbackAlert.style.borderLeft = '4px solid #059669';
+            feedbackIcon.className = 'fa-solid fa-circle-check text-success me-2';
+        } else if (data.isPartial) {
+            feedbackAlert.style.backgroundColor = '#fefce8';
+            feedbackAlert.style.color = '#854d0e';
+            feedbackAlert.style.borderLeft = '4px solid #ca8a04';
+            feedbackIcon.className = 'fa-solid fa-triangle-exclamation text-warning me-2';
+        } else {
+            feedbackAlert.style.backgroundColor = '#fef2f2';
+            feedbackAlert.style.color = '#991b1b';
+            feedbackAlert.style.borderLeft = '4px solid #dc2626';
+            feedbackIcon.className = 'fa-solid fa-circle-xmark text-danger me-2';
+        }
+
+        // Render diff tokens
+        var tokensContainer = document.getElementById('diffTokensContainer');
+        tokensContainer.innerHTML = '';
+        if (data.diffTokens && data.diffTokens.length > 0) {
+            data.diffTokens.forEach(t => {
+                var span = document.createElement('span');
+                span.className = 'diff-token ' + t.status;
+                span.innerText = t.text;
+                tokensContainer.appendChild(span);
+            });
+        }
+
+        document.getElementById('displayTargetHanzi').innerText = data.targetHanzi;
+        document.getElementById('displayTargetPinyin').innerText = data.targetPinyin;
+        document.getElementById('displayMeaning').innerText = data.meaning;
+
+        // Tự động focus nút tiếp theo
+        document.getElementById('btnNextQuestion').focus();
+    })
+    .catch(err => {
+        console.error('Error checking answer:', err);
+    });
+}
+
+function goToNextQuestion() {
+    window.location.href = nextQuestionUrl;
+}
+
+// Bắt phím tắt Space và Enter
+document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+        playCurrentAudio();
+    } else if (e.code === 'Enter') {
+        if (isChecked) {
+            e.preventDefault();
+            goToNextQuestion();
+        }
+    }
+});
+
+// Tự động phát âm thanh lần đầu khi vào trang
+window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        playCurrentAudio();
+    }, 400);
+});
+</script>
+}

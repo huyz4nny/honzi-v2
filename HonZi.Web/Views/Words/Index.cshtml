@@ -1,0 +1,166 @@
+@model HonZi.Web.Models.ViewModels.WordListViewModel
+@{
+    ViewData["Title"] = "Kho từ vựng HSK";
+}
+
+<div class="main-content py-10">
+    <div class="container">
+        <!-- Title Header & Actions -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div>
+                <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.875rem;">
+                    Từ vựng HSK
+                </h1>
+                <p class="mt-1 text-muted" style="font-size: 0.9rem;">
+                    Tra cứu theo cấp độ, tìm nhanh theo Hán tự, Pinyin hoặc nghĩa tiếng Việt (Tổng số: <strong>@Model.TotalCount</strong> từ).
+                </p>
+            </div>
+            @if (User.IsInRole("ADMIN"))
+            {
+                <div class="d-flex gap-2">
+                    <a asp-action="Import" class="btn btn-outline" style="border-color: #2e7559; color: #2e7559;">
+                        <i class="fa-solid fa-file-excel me-1"></i> Nhập từ Excel
+                    </a>
+                    <a asp-action="Create" class="btn btn-primary shadow-lift">
+                        <i class="fa-solid fa-plus me-1"></i> Thêm từ mới
+                    </a>
+                </div>
+            }
+        </div>
+
+        <!-- HSK Level Filter Pills -->
+        <div class="level-picker mb-4">
+            <a asp-action="Index" asp-route-hskLevel="" asp-route-search="@Model.SearchQuery" asp-route-topic="@Model.SelectedTopic" 
+               class="level-picker-pill @(Model.SelectedHsk == null ? "active" : "")">
+                Tất cả
+            </a>
+            @for (int lvl = 1; lvl <= 6; lvl++)
+            {
+                <a asp-action="Index" asp-route-hskLevel="@lvl" asp-route-search="@Model.SearchQuery" asp-route-topic="@Model.SelectedTopic" 
+                   class="level-picker-pill @(Model.SelectedHsk == lvl ? "active" : "")">
+                    HSK @lvl
+                </a>
+            }
+        </div>
+
+        <!-- Search Bar & Filters -->
+        <div class="card-plain shadow-card mb-6" style="padding: 1rem 1.25rem;">
+            <form asp-action="Index" method="get" class="d-flex flex-column sm-flex-row gap-3">
+                <input type="hidden" name="hskLevel" value="@Model.SelectedHsk" />
+                <div class="input-with-icon flex-1">
+                    <i class="fa-solid fa-magnifying-glass icon-left"></i>
+                    <input type="text" name="search" class="form-control" placeholder="Tìm theo chữ Hán, pinyin hoặc nghĩa tiếng Việt..." value="@Model.SearchQuery" />
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    <a asp-action="Index" class="btn btn-outline" title="Đặt lại">
+                        <i class="fa-solid fa-rotate"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Word List Group -->
+        @if (Model.Words.Any())
+        {
+            <ul class="word-list-group">
+                @foreach (var w in Model.Words)
+                {
+                    <li class="word-list-item">
+                        <!-- Chữ Hán Lớn -->
+                        <span class="font-hanzi text-ink" style="font-size: 2.25rem; min-width: 3.5rem; line-height: 1; font-weight: 700;">
+                            @w.Hanzi
+                        </span>
+
+                        <!-- Thông Tin Từ Vựng -->
+                        <div class="flex-1" style="min-width: 0;">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="text-primary fw-bold" style="font-size: 1.15rem;">@w.Pinyin</span>
+                                <span class="badge badge-secondary" style="font-size: 0.7rem;">HSK @w.HskLevel</span>
+                                @if (!string.IsNullOrEmpty(w.Topic))
+                                {
+                                    <span class="badge badge-accent" style="font-size: 0.7rem;">@w.Topic</span>
+                                }
+                            </div>
+                            <p class="text-ink mt-1 mb-0 fw-medium" style="font-size: 0.95rem;">
+                                @w.MeaningVi
+                            </p>
+                            @if (!string.IsNullOrEmpty(w.ExampleSentence))
+                            {
+                                <p class="text-muted mt-1 mb-0" style="font-size: 0.85rem;">
+                                    <span class="font-hanzi">@w.ExampleSentence</span>
+                                    @if (!string.IsNullOrEmpty(w.ExampleMeaningVi))
+                                    {
+                                        <span class="ms-1 fst-italic">— @w.ExampleMeaningVi</span>
+                                    }
+                                </p>
+                            }
+                        </div>
+
+                        <!-- Các Nút Hành Động -->
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-ghost btn-icon" title="Nghe phát âm" onclick="speak('@w.Hanzi')">
+                                <i class="fa-solid fa-volume-high text-primary"></i>
+                            </button>
+
+                            @if (User.IsInRole("ADMIN"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@w.WordId" class="btn btn-ghost btn-icon" title="Chỉnh sửa">
+                                    <i class="fa-regular fa-pen-to-square text-muted"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@w.WordId" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa từ này?');" style="display:inline;">
+                                    <button type="submit" class="btn btn-ghost btn-icon" title="Xóa">
+                                        <i class="fa-regular fa-trash-can text-danger"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </li>
+                }
+            </ul>
+
+            <!-- Phân Trang (Pagination) -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="d-flex justify-content-center align-items-center gap-2 mt-8">
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <a asp-action="Index" 
+                           asp-route-page="@(Model.CurrentPage - 1)" 
+                           asp-route-hskLevel="@Model.SelectedHsk" 
+                           asp-route-search="@Model.SearchQuery" 
+                           class="btn btn-outline btn-sm">
+                            <i class="fa-solid fa-chevron-left me-1"></i> Trước
+                        </a>
+                    }
+
+                    <span class="text-muted" style="font-size: 0.875rem;">
+                        Trang <strong>@Model.CurrentPage</strong> / @Model.TotalPages
+                    </span>
+
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <a asp-action="Index" 
+                           asp-route-page="@(Model.CurrentPage + 1)" 
+                           asp-route-hskLevel="@Model.SelectedHsk" 
+                           asp-route-search="@Model.SearchQuery" 
+                           class="btn btn-outline btn-sm">
+                            Sau <i class="fa-solid fa-chevron-right ms-1"></i>
+                        </a>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="card-plain text-center p-10 shadow-card">
+                <i class="fa-solid fa-folder-open text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3 class="text-ink fw-bold">Không tìm thấy từ vựng nào</h3>
+                <p class="text-muted mt-1">Hãy thử tìm với từ khóa khác hoặc thay đổi bộ lọc cấp độ HSK.</p>
+                <a asp-action="Index" class="btn btn-primary mt-4">
+                    Xem tất cả từ vựng
+                </a>
+            </div>
+        }
+    </div>
+</div>

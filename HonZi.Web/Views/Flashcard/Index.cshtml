@@ -1,0 +1,206 @@
+@model HonZi.Web.Models.ViewModels.FlashcardViewModel
+@{
+    ViewData["Title"] = $"Flashcard HSK {Model.SelectedHsk}";
+    var word = Model.CurrentWord;
+}
+
+<div class="main-content py-10">
+    <div class="container container-md">
+        <!-- Title & Action Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.875rem;">
+                    Flashcard HSK @Model.SelectedHsk
+                </h1>
+                <p class="text-muted mt-1" style="font-size: 0.875rem;">
+                    Lật thẻ học từ vựng, tự động ghi nhận tiến độ vào tài khoản.
+                </p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" asp-route-reset="true" 
+                   class="btn btn-outline btn-sm" 
+                   title="Học lại từ thẻ đầu tiên của HSK @Model.SelectedHsk">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Học lại từ đầu
+                </a>
+                @if (User.Identity?.IsAuthenticated == true && Model.DueCount > 0 && !Model.IsSrsMode)
+                {
+                    <a asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" asp-route-srsMode="true" class="btn btn-primary btn-sm shadow-lift" style="background: #16a34a; border-color: #16a34a;">
+                        <i class="fa-solid fa-brain me-1"></i> Ôn tập ngắt quãng SRS (@Model.DueCount từ đến hạn)
+                    </a>
+                }
+                @if (Model.IsSrsMode)
+                {
+                    <span class="badge" style="background: rgba(22, 163, 74, 0.15); color: #15803d; font-size: 0.85rem; padding: 0.5rem 0.75rem; border-radius: 8px;">
+                        <i class="fa-solid fa-brain me-1"></i> Đang ôn tập theo đường cong quên lãng
+                    </span>
+                    <a asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" asp-route-srsMode="false" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-list me-1"></i> Học toàn bộ
+                    </a>
+                }
+                <a asp-controller="Listening" asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" class="btn btn-outline btn-sm" style="color: var(--primary); border-color: var(--primary);">
+                    <i class="fa-solid fa-headphones me-1"></i> Luyện nghe HSK @Model.SelectedHsk
+                </a>
+                <a asp-controller="Quiz" asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" class="btn btn-outline btn-sm">
+                    Kiểm tra ngay
+                </a>
+            </div>
+        </div>
+
+        <!-- Level Picker Pills -->
+        <div class="level-picker mt-4">
+            @for (int lvl = 1; lvl <= 6; lvl++)
+            {
+                <a asp-action="Index" asp-route-hskLevel="@lvl" 
+                   class="level-picker-pill @(Model.SelectedHsk == lvl ? "active" : "")">
+                    HSK @lvl
+                </a>
+            }
+        </div>
+
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <div class="alert-box alert-info mt-4">
+                <i class="fa-solid fa-circle-info text-primary"></i>
+                <div>
+                    Bạn đang học ở chế độ khách. 
+                    <a asp-controller="Auth" asp-action="Login" class="fw-bold text-primary">Đăng nhập</a> 
+                    để lưu tiến độ và lịch ôn tập vào tài khoản.
+                </div>
+            </div>
+        }
+
+        @if (Model.IsCompleted)
+        {
+            <!-- Màn Hình Hoàn Thành Vòng Học -->
+            <div class="card-plain text-center mt-6 shadow-card" style="padding: 3rem 2rem;">
+                <div style="display: inline-flex; width: 4.5rem; height: 4.5rem; border-radius: 9999px; background-color: rgba(22, 163, 74, 0.12); color: var(--success); align-items: center; justify-content: center; font-size: 2.5rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="text-ink fw-extrabold" style="font-size: 1.75rem;">Chúc Mừng Bạn!</h2>
+                <p class="text-muted mt-2 mb-6" style="max-width: 420px; margin-left: auto; margin-right: auto;">
+                    Bạn đã hoàn thành lượt học toàn bộ <strong>@Model.TotalWords</strong> từ vựng cấp độ <strong>HSK @Model.SelectedHsk</strong>.
+                </p>
+                
+                <div class="d-flex justify-content-center flex-wrap gap-3">
+                    <a asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" asp-route-reset="true" class="btn btn-outline btn-lg">
+                        <i class="fa-solid fa-rotate-left me-2"></i> Học lại từ đầu
+                    </a>
+                    <a asp-controller="Listening" asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" class="btn btn-primary btn-lg shadow-lift">
+                        <i class="fa-solid fa-headphones me-2"></i> Thử thách Luyện nghe
+                    </a>
+                    <a asp-controller="Progress" asp-action="Index" class="btn btn-outline btn-lg">
+                        <i class="fa-solid fa-chart-line me-2"></i> Xem thống kê
+                    </a>
+                </div>
+            </div>
+        }
+        else if (word != null)
+        {
+            <!-- Thanh Tiến Độ Lần Học -->
+            <div class="d-flex align-items-center gap-3 mt-6">
+                <div class="progress-container flex-1">
+                    <div class="progress-bar-fill" style="width: @((Model.CurrentIndex + 1) * 100.0 / Model.TotalWords)%;"></div>
+                </div>
+                <span class="text-muted fw-semibold" style="font-size: 0.875rem;">
+                    @(Model.CurrentIndex + 1)/@Model.TotalWords
+                </span>
+            </div>
+
+            <!-- Thẻ Flashcard Lật 3D (3D Flip Card) -->
+            <div class="card-3d mt-6">
+                <div class="card-flipper" id="flashcardFlipper" onclick="toggleCardFlip(this)" role="button" aria-label="Lật thẻ">
+                    <!-- Mặt Trước (Front Face) -->
+                    <div class="card-face">
+                        <span class="card-hanzi-text font-hanzi">@word.Hanzi</span>
+                        <span class="mt-6 uppercase tracking-widest text-muted" style="font-size: 0.75rem; font-weight: 600;">
+                            <i class="fa-solid fa-hand-pointer me-1"></i> Chạm để lật thẻ
+                        </span>
+                    </div>
+
+                    <!-- Mặt Sau (Back Face) -->
+                    <div class="card-face-back">
+                        <p class="text-primary fw-bold" style="font-size: 1.75rem; margin-bottom: 0;">@word.Pinyin</p>
+                        <p class="text-ink fw-bold" style="font-size: 1.35rem; margin-bottom: 0;">@word.MeaningVi</p>
+                        
+                        @if (!string.IsNullOrEmpty(word.ExampleSentence))
+                        {
+                            <div class="rounded-xl bg-secondary p-3 w-full text-center" style="max-width: 95%;">
+                                <p class="font-hanzi text-ink" style="font-size: 1.15rem; margin-bottom: 0.25rem;">
+                                    @word.ExampleSentence
+                                </p>
+                                <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 0;">
+                                    @word.ExampleMeaningVi
+                                </p>
+                            </div>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(word.Topic))
+                        {
+                            <span class="badge badge-accent mt-1">
+                                @word.Topic
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thanh Điều Khiển Tiện Ích -->
+            <div class="mt-5 d-flex align-items-center justify-content-center gap-2">
+                @if (Model.CurrentIndex > 0)
+                {
+                    <a asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" asp-route-index="@(Model.CurrentIndex - 1)" class="btn btn-outline btn-icon" title="Thẻ trước đó">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                }
+
+                <button type="button" class="btn btn-outline" onclick="event.stopPropagation(); speak('@word.Hanzi')">
+                    <i class="fa-solid fa-volume-high me-1 text-primary"></i> Phát âm
+                </button>
+
+                <button type="button" class="btn btn-outline" onclick="toggleCardFlip(document.getElementById('flashcardFlipper'))">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Lật thẻ
+                </button>
+
+                @if (Model.CurrentIndex < Model.TotalWords - 1)
+                {
+                    <a asp-action="Index" asp-route-hskLevel="@Model.SelectedHsk" asp-route-index="@(Model.CurrentIndex + 1)" class="btn btn-outline btn-icon" title="Thẻ tiếp theo">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                }
+            </div>
+
+            <!-- 2 Nút Đánh Giá Trạng Thái Học -->
+            <div class="mt-4 d-grid grid-cols-2 gap-3">
+                <form asp-action="Mark" method="post">
+                    <input type="hidden" name="hskLevel" value="@Model.SelectedHsk" />
+                    <input type="hidden" name="currentIndex" value="@Model.CurrentIndex" />
+                    <input type="hidden" name="wordId" value="@word.WordId" />
+                    <input type="hidden" name="status" value="learning" />
+                    <input type="hidden" name="srsMode" value="@(Model.IsSrsMode ? "true" : "false")" />
+                    <button type="submit" class="btn btn-outline w-full" style="height: 3rem; font-size: 1rem;">
+                        <i class="fa-solid fa-xmark me-2 text-danger"></i> Chưa thuộc
+                    </button>
+                </form>
+
+                <form asp-action="Mark" method="post">
+                    <input type="hidden" name="hskLevel" value="@Model.SelectedHsk" />
+                    <input type="hidden" name="currentIndex" value="@Model.CurrentIndex" />
+                    <input type="hidden" name="wordId" value="@word.WordId" />
+                    <input type="hidden" name="status" value="mastered" />
+                    <input type="hidden" name="srsMode" value="@(Model.IsSrsMode ? "true" : "false")" />
+                    <button type="submit" class="btn btn-primary w-full shadow-lift" style="height: 3rem; font-size: 1rem;">
+                        <i class="fa-solid fa-check me-2"></i> Đã thuộc
+                    </button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="card-plain text-center mt-6 p-10 shadow-card">
+                <p class="text-muted" style="font-size: 0.95rem;">
+                    Cấp HSK @Model.SelectedHsk chưa có từ nào. Hãy thử HSK 1 hoặc thêm từ mới.
+                </p>
+            </div>
+        }
+    </div>
+</div>

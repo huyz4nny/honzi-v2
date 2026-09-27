@@ -1,0 +1,272 @@
+@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " — " : "")HanziGo (HonZi .NET)</title>
+    <meta name="description" content="Học từ vựng tiếng Trung chuẩn HSK 1-6 với flashcard 3D, luyện listening nghe audio gõ chữ, và bài kiểm tra trắc nghiệm.">
+    <link rel="icon" href="~/assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@500;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- App Design System Stylesheet -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+
+    <!-- Custom enhancements for Listening diffing -->
+    <style>
+        .diff-token {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            margin: 0 0.1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-family: var(--font-hanzi, "Noto Serif SC", serif);
+            font-size: 1.35rem;
+        }
+        .diff-token.match {
+            background-color: rgba(22, 163, 74, 0.15);
+            color: #15803d;
+            border: 1px solid rgba(22, 163, 74, 0.3);
+        }
+        .diff-token.mismatch {
+            background-color: rgba(220, 38, 38, 0.15);
+            color: #b91c1c;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            text-decoration: underline wavy #b91c1c;
+        }
+        .diff-token.missing {
+            background-color: rgba(234, 179, 8, 0.15);
+            color: #a16207;
+            border: 1px dashed rgba(234, 179, 8, 0.5);
+        }
+        .audio-wave-anim {
+            display: inline-flex;
+            gap: 3px;
+            align-items: center;
+            height: 18px;
+        }
+        .audio-wave-anim span {
+            width: 3px;
+            height: 100%;
+            background-color: currentColor;
+            border-radius: 3px;
+            animation: waveBounce 0.8s ease-in-out infinite alternate;
+        }
+        .audio-wave-anim span:nth-child(2) { animation-delay: 0.2s; }
+        .audio-wave-anim span:nth-child(3) { animation-delay: 0.4s; }
+        @@keyframes waveBounce {
+            from { height: 4px; }
+            to { height: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <!-- Logo Brand -->
+            <a asp-controller="Home" asp-action="Index" class="brand-logo">
+                <span class="logo-icon">汉</span>
+                <span class="logo-text">HanziGo</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="main-nav md-flex">
+                <a asp-controller="Home" asp-action="Index" 
+                   class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
+                    Trang chủ
+                </a>
+                <a asp-controller="Words" asp-action="Index" 
+                   class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Words" && !User.IsInRole("ADMIN") ? "active" : "")">
+                    Từ vựng
+                </a>
+                <a asp-controller="Flashcard" asp-action="Index" 
+                   class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Flashcard" ? "active" : "")">
+                    Flashcard
+                </a>
+                <a asp-controller="Listening" asp-action="Index" 
+                   class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Listening" ? "active" : "")"
+                   style="color: var(--primary); font-weight: 700;">
+                    <i class="fa-solid fa-headphones me-1"></i> Luyện nghe
+                </a>
+                <a asp-controller="Quiz" asp-action="Index" 
+                   class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Quiz" ? "active" : "")">
+                    Kiểm tra
+                </a>
+                <a asp-controller="Progress" asp-action="Index" 
+                   class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Progress" ? "active" : "")">
+                    Thống kê
+                </a>
+                <a href="javascript:void(0)" onclick="openWelcomeModal(true)" 
+                   class="nav-link-item" style="color: var(--muted-foreground);" title="Xem giới thiệu nền tảng HanziGo">
+                    <i class="fa-regular fa-circle-question me-1"></i> Giới thiệu
+                </a>
+
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <a asp-controller="Words" asp-action="Index" 
+                       class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Words" ? "active" : "")" 
+                       style="color: var(--primary); font-weight: 600;">
+                        <i class="fa-solid fa-list-check me-1"></i> Quản lý từ vựng
+                    </a>
+                    <a asp-controller="Admin" asp-action="Users" 
+                       class="nav-link-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "")" 
+                       style="color: var(--primary); font-weight: 600;">
+                        <i class="fa-solid fa-users-gear me-1"></i> Quản lý học viên
+                    </a>
+                }
+            </nav>
+
+            <!-- Right Side: User & Auth Buttons -->
+            <div class="d-flex align-items-center gap-2" style="margin-left: auto;">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <span class="text-muted d-none sm-block" style="font-size: 0.875rem; max-width: 160px;" title="@User.Identity.Name">
+                        <i class="fa-regular fa-user me-1"></i> @User.Identity.Name
+                        @if (User.IsInRole("ADMIN"))
+                        {
+                            <span class="badge badge-primary ms-1" style="font-size: 0.65rem;">Admin</span>
+                        }
+                    </span>
+                    <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-ghost btn-icon" title="Đăng xuất" aria-label="Đăng xuất">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Auth" asp-action="Login" class="btn btn-primary btn-sm">
+                        Đăng nhập
+                    </a>
+                }
+
+                <!-- Mobile Hamburger Toggle -->
+                <button type="button" 
+                        class="btn btn-ghost btn-icon md-hidden" 
+                        id="mobileMenuToggle" 
+                        aria-label="Menu"
+                        onclick="toggleMobileMenu()">
+                    <i class="fa-solid fa-bars" style="font-size: 1.1rem;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+            <nav class="d-grid gap-1">
+                <a asp-controller="Home" asp-action="Index" class="nav-link-item">Trang chủ</a>
+                <a asp-controller="Words" asp-action="Index" class="nav-link-item">Từ vựng</a>
+                <a asp-controller="Flashcard" asp-action="Index" class="nav-link-item">Flashcard</a>
+                <a asp-controller="Listening" asp-action="Index" class="nav-link-item" style="color: var(--primary); font-weight: 700;">
+                    <i class="fa-solid fa-headphones me-1"></i> Luyện nghe
+                </a>
+                <a asp-controller="Quiz" asp-action="Index" class="nav-link-item">Kiểm tra</a>
+                <a asp-controller="Progress" asp-action="Index" class="nav-link-item">Thống kê</a>
+                <a href="javascript:void(0)" onclick="openWelcomeModal(true); toggleMobileMenu();" class="nav-link-item">
+                    <i class="fa-regular fa-circle-question me-1"></i> Giới thiệu web
+                </a>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <a asp-controller="Words" asp-action="Index" class="nav-link-item">Quản lý từ vựng</a>
+                    <a asp-controller="Admin" asp-action="Users" class="nav-link-item">Quản lý học viên</a>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <!-- Global Alert Notifications -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="container mt-4">
+            <div class="alert-box alert-success" style="background-color: #ecfdf5; border-left: 4px solid #059669; padding: 1rem; border-radius: 8px; color: #065f46;">
+                <i class="fa-solid fa-circle-check text-success me-2"></i>
+                <div>@TempData["SuccessMessage"]</div>
+            </div>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="container mt-4">
+            <div class="alert-box alert-danger" style="background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 1rem; border-radius: 8px; color: #991b1b;">
+                <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>
+                <div>@TempData["ErrorMessage"]</div>
+            </div>
+        </div>
+    }
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="container mt-4">
+            <div class="alert-box alert-info" style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 1rem; border-radius: 8px; color: #1e40af;">
+                <i class="fa-solid fa-circle-info text-primary me-2"></i>
+                <div>@TempData["InfoMessage"]</div>
+            </div>
+        </div>
+    }
+
+    <!-- Main Content Area -->
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3 text-muted" style="font-size: 0.875rem;">
+            <div>
+                HanziGo · 每天一点点 — mỗi ngày một chút · Nền tảng học tiếng Trung C# (.NET 9)
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <a href="javascript:void(0)" onclick="openWelcomeModal(true)" class="text-primary fw-semibold" style="text-decoration: underline;">
+                    <i class="fa-solid fa-circle-info me-1"></i> Giới thiệu về HanziGo & Phương pháp
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Platform Introduction Modal -->
+    <partial name="_WelcomeModal" />
+
+    <!-- Shared JavaScript Helpers -->
+    <script>
+    // 1. Web Speech Synthesis API with adjustable rate
+    function speak(text, rate) {
+        if (!text || typeof window === 'undefined') return;
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            var utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = rate || 0.85; // Default speech rate
+            window.speechSynthesis.speak(utterance);
+        } else {
+            console.warn('Trình duyệt không hỗ trợ Web Speech Synthesis.');
+        }
+    }
+
+    // 2. Mobile Menu Toggle
+    function toggleMobileMenu() {
+        var drawer = document.getElementById('mobileMenuDrawer');
+        if (drawer) {
+            drawer.classList.toggle('show');
+        }
+    }
+
+    // 3. 3D Flip Card Toggle
+    function toggleCardFlip(cardElement) {
+        var flipper = cardElement || document.querySelector('.card-flipper');
+        if (flipper) {
+            flipper.classList.toggle('card-flipped');
+        }
+    }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,19 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## IDEs
+.vs/
+.vscode/
+.idea/
+
+## Java legacy & docs
+nbproject/private/
+build/
+dist/
+*.pptx
+*.docx

@@ -1,0 +1,89 @@
+@model HonZi.Web.Models.ViewModels.WordFormViewModel
+@{
+    ViewData["Title"] = "Thêm từ vựng mới";
+}
+
+<div class="main-content py-10">
+    <div class="container container-md">
+        <div class="card-plain shadow-card" style="padding: 2rem;">
+            <!-- Header -->
+            <div class="d-flex align-items-center justify-content-between mb-6 pb-4" style="border-bottom: 1px solid var(--border);">
+                <div>
+                    <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.5rem;">
+                        Thêm từ vựng HSK mới
+                    </h1>
+                    <p class="text-muted mt-1" style="font-size: 0.875rem;">
+                        Nhập đầy đủ thông tin chữ Hán, phiên âm và giải nghĩa tiếng Việt.
+                    </p>
+                </div>
+                <a asp-action="Index" class="btn btn-outline btn-sm">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                </a>
+            </div>
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-4"></div>
+
+                <div class="d-grid gap-4">
+                    <div class="d-grid sm-grid-cols-3 gap-3">
+                        <div class="form-group">
+                            <label asp-for="Hanzi" class="form-label">Hán tự (Hanzi) <span class="text-danger">*</span></label>
+                            <input asp-for="Hanzi" class="form-control font-hanzi fw-bold text-primary" style="font-size: 1.25rem;" placeholder="vd: 你好" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Pinyin" class="form-label">Phiên âm (Pinyin) <span class="text-danger">*</span></label>
+                            <input asp-for="Pinyin" class="form-control fw-semibold" placeholder="vd: nǐ hǎo" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="HskLevel" class="form-label">Cấp độ HSK <span class="text-danger">*</span></label>
+                            <select asp-for="HskLevel" class="form-select" required>
+                                <option value="1">HSK 1</option>
+                                <option value="2">HSK 2</option>
+                                <option value="3">HSK 3</option>
+                                <option value="4">HSK 4</option>
+                                <option value="5">HSK 5</option>
+                                <option value="6">HSK 6</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-grid sm-grid-cols-3 gap-3">
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label asp-for="MeaningVi" class="form-label">Nghĩa tiếng Việt <span class="text-danger">*</span></label>
+                            <input asp-for="MeaningVi" class="form-control" placeholder="vd: Xin chào" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Topic" class="form-label">Chủ đề (Topic)</label>
+                            <input asp-for="Topic" class="form-control" placeholder="vd: Chào hỏi" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ExampleSentence" class="form-label">Câu ví dụ (Chữ Hán)</label>
+                        <input asp-for="ExampleSentence" class="form-control font-hanzi" placeholder="vd: 你好！很高兴认识你。" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ExampleMeaningVi" class="form-label">Dịch nghĩa câu ví dụ (Tiếng Việt)</label>
+                        <input asp-for="ExampleMeaningVi" class="form-control" placeholder="vd: Xin chào! Rất vui được làm quen với bạn." />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="AudioUrl" class="form-label">Đường dẫn file Audio (tùy chọn, để trống sẽ dùng giọng đọc Web Speech API)</label>
+                        <input asp-for="AudioUrl" class="form-control" placeholder="vd: /audio/hsk1/nihao.mp3" />
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-3 mt-4 pt-4" style="border-top: 1px solid var(--border);">
+                        <a asp-action="Index" class="btn btn-outline">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-primary shadow-lift">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Lưu từ vựng
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

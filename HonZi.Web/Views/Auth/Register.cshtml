@@ -1,0 +1,77 @@
+@model HonZi.Web.Models.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+
+<div class="main-content py-14">
+    <div class="container container-sm" style="max-width: 440px;">
+        <div class="card-plain shadow-card" style="padding: 2rem;">
+            <!-- Header -->
+            <div class="text-center mb-6">
+                <div class="logo-icon mx-auto mb-3" style="width: 3rem; height: 3rem; font-size: 1.5rem; border-radius: var(--radius-xl); background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lift); font-family: var(--font-hanzi);">
+                    汉
+                </div>
+                <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.65rem;">
+                    Tạo tài khoản mới
+                </h1>
+                <p class="text-muted mt-1" style="font-size: 0.875rem;">
+                    Bắt đầu hành trình chinh phục tiếng Trung HSK 1-6.
+                </p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="d-grid grid-cols-2 gap-1 p-1 rounded-xl bg-secondary mb-6">
+                <a asp-controller="Auth" asp-action="Login" 
+                   class="btn btn-sm btn-ghost text-center" 
+                   style="border-radius: var(--radius-md);">
+                    Đăng nhập
+                </a>
+                <a asp-controller="Auth" asp-action="Register" 
+                   class="btn btn-sm btn-primary text-center" 
+                   style="border-radius: var(--radius-md);">
+                    Đăng ký
+                </a>
+            </div>
+
+            <form asp-controller="Auth" asp-action="Register" method="post" class="d-grid gap-4">
+                <div asp-validation-summary="All" class="text-danger" style="font-size: 0.85rem;"></div>
+
+                <div class="form-group">
+                    <label asp-for="Username" class="form-label">Tên đăng nhập</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user icon-left"></i>
+                        <input asp-for="Username" class="form-control" placeholder="Tên đăng nhập (tối thiểu 3 ký tự)" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">Địa chỉ Email</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-envelope icon-left"></i>
+                        <input asp-for="Email" class="form-control" placeholder="email@example.com" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password" class="form-label">Mật khẩu</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock icon-left"></i>
+                        <input asp-for="Password" class="form-control" placeholder="Tối thiểu 6 ký tự" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock-open icon-left"></i>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" required />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-full shadow-lift mt-2">
+                    Tạo tài khoản ngay
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

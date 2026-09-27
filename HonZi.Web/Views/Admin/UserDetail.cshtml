@@ -1,0 +1,137 @@
+@model HonZi.Web.Models.ViewModels.AdminUserDetailViewModel
+@{
+    ViewData["Title"] = $"Chi tiết học viên: {Model.User.Username}";
+}
+
+<div class="main-content py-10">
+    <div class="container container-md" style="max-width: 900px;">
+        <!-- Header -->
+        <div class="d-flex align-items-center justify-content-between mb-6">
+            <div>
+                <a asp-action="Users" class="btn btn-ghost btn-sm mb-2" style="padding-left: 0; color: var(--text-muted);">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách học viên
+                </a>
+                <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.75rem;">
+                    Học viên: @Model.User.Username
+                    <span class="badge @(Model.User.Role == "ADMIN" ? "badge-primary" : "badge-secondary") ms-2" style="font-size: 0.8rem;">
+                        @Model.User.Role
+                    </span>
+                </h1>
+                <p class="text-muted mt-1" style="font-size: 0.875rem;">
+                    Email: <strong>@Model.User.Email</strong> · Ngày tham gia: @Model.User.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                </p>
+            </div>
+        </div>
+
+        <!-- 3 Highlight Metric Cards -->
+        <div class="d-grid sm-grid-cols-3 gap-4 mb-6">
+            <div class="card-plain shadow-card p-4 text-center">
+                <span class="text-muted text-xs uppercase fw-bold">Từ đã thuộc</span>
+                <div class="text-ink fw-extrabold mt-1" style="font-size: 1.75rem; color: #15803d;">
+                    @Model.Stats.MasteredCount / @Model.Stats.TotalWords
+                </div>
+            </div>
+
+            <div class="card-plain shadow-card p-4 text-center">
+                <span class="text-muted text-xs uppercase fw-bold">Bài Quiz đã làm</span>
+                <div class="text-ink fw-extrabold mt-1" style="font-size: 1.75rem; color: #2563eb;">
+                    @Model.Quizzes.Count
+                </div>
+            </div>
+
+            <div class="card-plain shadow-card p-4 text-center">
+                <span class="text-muted text-xs uppercase fw-bold">Bài Luyện nghe</span>
+                <div class="text-ink fw-extrabold mt-1" style="font-size: 1.75rem; color: var(--primary);">
+                    @Model.Listenings.Count
+                </div>
+            </div>
+        </div>
+
+        <!-- Listening History of this User -->
+        <div class="card-plain shadow-card p-6 mb-6">
+            <h3 class="fw-bold text-ink mb-4" style="font-size: 1.15rem;">
+                <i class="fa-solid fa-headphones text-primary me-2"></i> Lịch sử Luyện nghe của học viên
+            </h3>
+            @if (Model.Listenings.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table" style="width: 100%;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0; font-size: 0.85rem; color: #64748b;">
+                                <th style="padding: 0.6rem;">Thời gian</th>
+                                <th style="padding: 0.6rem;">Cấp độ</th>
+                                <th style="padding: 0.6rem;">Nội dung</th>
+                                <th style="padding: 0.6rem;">Chế độ gõ</th>
+                                <th style="padding: 0.6rem;">Điểm số</th>
+                                <th style="padding: 0.6rem;">Độ chính xác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var l in Model.Listenings)
+                            {
+                                <tr style="border-bottom: 1px solid #f1f5f9; font-size: 0.9rem;">
+                                    <td style="padding: 0.6rem;">@l.TakenAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td style="padding: 0.6rem;"><span class="badge badge-secondary">HSK @l.HskLevel</span></td>
+                                    <td style="padding: 0.6rem;">@(l.ExerciseType == "Sentence" ? "Câu ví dụ" : "Từ vựng")</td>
+                                    <td style="padding: 0.6rem;">@(l.InputMode == "Pinyin" ? "Pinyin" : "Chữ Hán")</td>
+                                    <td style="padding: 0.6rem; font-weight: bold; color: var(--primary);">@l.Score / @l.TotalQuestions</td>
+                                    <td style="padding: 0.6rem;">
+                                        <span class="badge @(l.AccuracyPercentage >= 80 ? "badge-primary" : "badge-secondary")">
+                                            @l.AccuracyPercentage%
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted mb-0">Học viên này chưa thực hiện bài luyện nghe nào.</p>
+            }
+        </div>
+
+        <!-- Quiz History of this User -->
+        <div class="card-plain shadow-card p-6">
+            <h3 class="fw-bold text-ink mb-4" style="font-size: 1.15rem;">
+                <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Lịch sử làm bài Quiz
+            </h3>
+            @if (Model.Quizzes.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table" style="width: 100%;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0; font-size: 0.85rem; color: #64748b;">
+                                <th style="padding: 0.6rem;">Thời gian</th>
+                                <th style="padding: 0.6rem;">Cấp độ</th>
+                                <th style="padding: 0.6rem;">Điểm số</th>
+                                <th style="padding: 0.6rem;">Tỷ lệ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var q in Model.Quizzes)
+                            {
+                                var pct = Math.Round((double)q.Score / q.TotalQuestions * 100, 0);
+                                <tr style="border-bottom: 1px solid #f1f5f9; font-size: 0.9rem;">
+                                    <td style="padding: 0.6rem;">@q.TakenAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td style="padding: 0.6rem;"><span class="badge badge-secondary">HSK @q.HskLevel</span></td>
+                                    <td style="padding: 0.6rem; font-weight: bold; color: var(--primary);">@q.Score / @q.TotalQuestions</td>
+                                    <td style="padding: 0.6rem;">
+                                        <span class="badge @(pct >= 80 ? "badge-primary" : "badge-secondary")">
+                                            @pct%
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted mb-0">Học viên này chưa hoàn thành bài quiz nào.</p>
+            }
+        </div>
+    </div>
+</div>

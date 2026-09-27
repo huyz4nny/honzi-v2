@@ -1,0 +1,112 @@
+@model HonZi.Web.Models.ViewModels.AdminUsersViewModel
+@{
+    ViewData["Title"] = "Quản lý học viên & Hệ thống";
+}
+
+<div class="main-content py-10">
+    <div class="container">
+        <!-- Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-6">
+            <div>
+                <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.875rem;">
+                    <i class="fa-solid fa-chart-line text-primary me-2"></i>Thống kê học viên & Quản trị
+                </h1>
+                <p class="mt-1 text-muted" style="font-size: 0.9rem;">
+                    Quản lý tài khoản người dùng, phân quyền ADMIN/USER và theo dõi thống kê toàn hệ thống.
+                </p>
+            </div>
+            <div>
+                <a asp-controller="Words" asp-action="Index" class="btn btn-outline">
+                    <i class="fa-solid fa-book-bookmark me-1"></i> Quản lý từ vựng
+                </a>
+            </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="d-grid sm-grid-cols-2 lg-grid-cols-4 gap-4 mb-8">
+            <div class="card-plain shadow-card p-6">
+                <p class="text-muted fw-medium" style="font-size: 0.85rem;">Tổng tài khoản</p>
+                <h2 class="mt-1 text-ink fw-extrabold" style="font-size: 2rem;">@Model.TotalUsers</h2>
+                <span class="text-muted" style="font-size: 0.8rem;">(@Model.AdminCount Quản trị viên)</span>
+            </div>
+
+            <div class="card-plain shadow-card p-6">
+                <p class="text-muted fw-medium" style="font-size: 0.85rem;">Kho từ vựng HSK</p>
+                <h2 class="mt-1 text-ink fw-extrabold" style="font-size: 2rem; color: #2e7559;">@Model.TotalWords</h2>
+                <span class="text-muted" style="font-size: 0.8rem;">Cấp độ HSK 1 - HSK 6</span>
+            </div>
+
+            <div class="card-plain shadow-card p-6">
+                <p class="text-muted fw-medium" style="font-size: 0.85rem;">Lượt làm Quiz</p>
+                <h2 class="mt-1 text-ink fw-extrabold" style="font-size: 2rem; color: #2563eb;">@Model.TotalQuizCount</h2>
+                <span class="text-muted" style="font-size: 0.8rem;">Bài trắc nghiệm đã nộp</span>
+            </div>
+
+            <div class="card-plain shadow-card p-6">
+                <p class="text-muted fw-medium" style="font-size: 0.85rem;">Lượt Luyện nghe</p>
+                <h2 class="mt-1 text-ink fw-extrabold" style="font-size: 2rem; color: var(--primary);">@Model.TotalListeningCount</h2>
+                <span class="text-muted" style="font-size: 0.8rem;">Bài chép chính tả Dictation</span>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="card-plain shadow-card p-6" style="background: #ffffff; border-radius: 16px;">
+            <h3 class="fw-bold text-ink mb-4" style="font-size: 1.25rem;">
+                Danh sách người dùng (@Model.Users.Count)
+            </h3>
+
+            <div class="table-responsive">
+                <table class="table" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e2e8f0; text-align: left; font-size: 0.85rem; color: #64748b;">
+                            <th style="padding: 0.75rem;">ID</th>
+                            <th style="padding: 0.75rem;">Tên người dùng</th>
+                            <th style="padding: 0.75rem;">Email</th>
+                            <th style="padding: 0.75rem;">Vai trò</th>
+                            <th style="padding: 0.75rem;">Ngày đăng ký</th>
+                            <th style="padding: 0.75rem; text-align: right;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in Model.Users)
+                        {
+                            <tr style="border-bottom: 1px solid #f1f5f9; font-size: 0.9rem;">
+                                <td style="padding: 0.75rem;">#@u.UserId</td>
+                                <td style="padding: 0.75rem; font-weight: bold; color: var(--text-ink);">
+                                    <a asp-action="UserDetail" asp-route-id="@u.UserId" class="hover-underline text-ink">
+                                        @u.Username
+                                    </a>
+                                </td>
+                                <td style="padding: 0.75rem; color: #64748b;">@u.Email</td>
+                                <td style="padding: 0.75rem;">
+                                    <span class="badge @(u.Role == "ADMIN" ? "badge-primary" : "badge-secondary")">
+                                        @u.Role
+                                    </span>
+                                </td>
+                                <td style="padding: 0.75rem; color: #64748b;">@u.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td style="padding: 0.75rem; text-align: right;">
+                                    <a asp-action="UserDetail" asp-route-id="@u.UserId" class="btn btn-outline btn-sm me-1" title="Chi tiết tiến độ">
+                                        <i class="fa-solid fa-chart-simple"></i>
+                                    </a>
+                                    @if (u.UserId != 1)
+                                    {
+                                        <form asp-action="ToggleRole" asp-route-id="@u.UserId" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-outline btn-sm me-1" title="Đổi quyền">
+                                                <i class="fa-solid fa-user-shield"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-action="DeleteUser" asp-route-id="@u.UserId" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng @u.Username?');" style="display:inline;">
+                                            <button type="submit" class="btn btn-ghost btn-sm text-danger" title="Xóa">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

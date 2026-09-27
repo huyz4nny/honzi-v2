@@ -1,0 +1,109 @@
+@model HonZi.Web.Models.ViewModels.QuizResultViewModel
+@{
+    ViewData["Title"] = $"Kết quả kiểm tra HSK {Model.HskLevel}";
+}
+
+<div class="main-content py-10">
+    <div class="container container-md">
+        <!-- Score Summary Card -->
+        <div class="card-plain mb-6 shadow-card" style="padding: 2rem;">
+            <h2 class="text-ink fw-extrabold" style="font-size: 1.5rem;">Kết quả kiểm tra HSK @Model.HskLevel</h2>
+            
+            <p class="mt-2 text-primary fw-extrabold" style="font-size: 3rem; line-height: 1;">
+                @Model.Score/@Model.TotalQuestions
+            </p>
+            
+            <p class="mt-1 text-muted" style="font-size: 0.95rem;">
+                @if (Model.Score == Model.TotalQuestions)
+                {
+                    <span>Tuyệt đối xuất sắc! Bạn đã trả lời đúng toàn bộ câu hỏi.</span>
+                }
+                else
+                {
+                    <span>Đúng @Model.Score câu, sai @(Model.TotalQuestions - Model.Score) câu. Hãy tiếp tục ôn luyện để nâng cao phản xạ nhé.</span>
+                }
+            </p>
+
+            <div class="progress-container mt-4 mb-5" style="height: 0.65rem;">
+                <div class="progress-bar-fill @(Model.Score >= 8 ? "success" : "")" style="width: @Model.Percentage%;"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex flex-wrap gap-3">
+                <a asp-action="Index" asp-route-hskLevel="@Model.HskLevel" class="btn btn-primary shadow-lift">
+                    <i class="fa-solid fa-rotate-right me-1"></i> Làm lại bài kiểm tra
+                </a>
+                <a asp-controller="Listening" asp-action="Index" asp-route-hskLevel="@Model.HskLevel" class="btn btn-outline" style="color: var(--primary); border-color: var(--primary);">
+                    <i class="fa-solid fa-headphones me-1"></i> Luyện nghe HSK @Model.HskLevel
+                </a>
+                <a asp-controller="Flashcard" asp-action="Index" asp-route-hskLevel="@Model.HskLevel" class="btn btn-outline">
+                    Ôn flashcard
+                </a>
+                <a asp-controller="Progress" asp-action="Index" class="btn btn-outline">
+                    Xem thống kê
+                </a>
+            </div>
+        </div>
+
+        <!-- Question Answer Review List -->
+        <h3 class="text-ink fw-bold mb-4" style="font-size: 1.25rem;">
+            Chi tiết các câu hỏi:
+        </h3>
+
+        <ul class="word-list-group">
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                var q = Model.Questions[i];
+
+                <li class="word-list-item d-flex align-items-start gap-4">
+                    <!-- Icon Trạng Thái -->
+                    <div style="margin-top: 0.25rem;">
+                        @if (q.IsCorrect)
+                        {
+                            <span style="display: inline-flex; width: 2rem; height: 2rem; border-radius: 9999px; background-color: rgba(22, 163, 74, 0.12); color: var(--success); align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                        }
+                        else
+                        {
+                            <span style="display: inline-flex; width: 2rem; height: 2rem; border-radius: 9999px; background-color: rgba(220, 38, 38, 0.12); color: var(--danger); align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        }
+                    </div>
+
+                    <!-- Chữ Hán & Chi tiết -->
+                    <div class="flex-1">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="font-hanzi text-ink" style="font-size: 1.75rem; font-weight: 700;">
+                                @q.Hanzi
+                            </span>
+                            <span class="text-primary fw-semibold" style="font-size: 1rem;">
+                                @q.Pinyin
+                            </span>
+                            <button type="button" class="btn btn-ghost btn-icon ms-auto" onclick="speak('@q.Hanzi')" title="Phát âm">
+                                <i class="fa-solid fa-volume-high text-primary"></i>
+                            </button>
+                        </div>
+
+                        <div class="mt-2" style="font-size: 0.875rem;">
+                            <div>
+                                <span class="text-muted">Bạn chọn:</span> 
+                                <span class="@(q.IsCorrect ? "text-success fw-bold" : "text-danger fw-semibold")">
+                                    @(string.IsNullOrEmpty(q.UserAnswer) ? "(Chưa chọn)" : q.UserAnswer)
+                                </span>
+                            </div>
+                            @if (!q.IsCorrect)
+                            {
+                                <div class="mt-1">
+                                    <span class="text-muted">Đáp án đúng:</span> 
+                                    <span class="text-success fw-bold">@q.CorrectMeaning</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+@model HonZi.Web.Models.ViewModels.QuizViewModel
+@{
+    ViewData["Title"] = $"Kiểm tra HSK {Model.HskLevel}";
+}
+
+<div class="main-content py-10">
+    <div class="container container-md">
+        <!-- Header -->
+        <h1 class="text-ink fw-extrabold tracking-tight" style="font-size: 1.875rem;">
+            Kiểm tra trắc nghiệm HSK @Model.HskLevel
+        </h1>
+        <p class="mt-1 text-muted" style="font-size: 0.9rem;">
+            10 câu trắc nghiệm chọn nghĩa đúng, có phát âm và chấm điểm tự động.
+        </p>
+
+        <!-- Level Picker Pills -->
+        <div class="level-picker mt-4">
+            @for (int lvl = 1; lvl <= 6; lvl++)
+            {
+                <a asp-action="Index" asp-route-hskLevel="@lvl" 
+                   class="level-picker-pill @(Model.HskLevel == lvl ? "active" : "")">
+                    HSK @lvl
+                </a>
+            }
+        </div>
+
+        @if (Model.Questions.Any())
+        {
+            <form asp-action="Submit" method="post" class="mt-6">
+                <input type="hidden" name="hskLevel" value="@Model.HskLevel" />
+
+                @for (int i = 0; i < Model.Questions.Count; i++)
+                {
+                    var q = Model.Questions[i];
+                    <div class="card-plain mb-6 shadow-card" style="padding: 1.75rem;">
+                        <!-- Header Câu Hỏi -->
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <span class="badge badge-primary px-3 py-1 font-semibold">
+                                Câu @(i + 1) / @Model.Questions.Count
+                            </span>
+                            <button type="button" class="btn btn-ghost btn-icon" onclick="speak('@q.Hanzi')" title="Nghe phát âm">
+                                <i class="fa-solid fa-volume-high text-primary" style="font-size: 1.1rem;"></i>
+                            </button>
+                        </div>
+
+                        <!-- Chữ Hán & Pinyin -->
+                        <div class="text-center py-4 rounded-2xl bg-secondary mb-5" style="border: 1px solid var(--border);">
+                            <div class="font-hanzi text-ink" style="font-size: 3.5rem; line-height: 1.1;">
+                                @q.Hanzi
+                            </div>
+                            <div class="text-primary fw-bold mt-2" style="font-size: 1.35rem;">
+                                @q.Pinyin
+                            </div>
+                        </div>
+
+                        <p class="text-muted fw-semibold mb-3" style="font-size: 0.9rem;">
+                            Chọn nghĩa tiếng Việt đúng:
+                        </p>
+
+                        <!-- Danh Sách 4 Đáp Án -->
+                        <div class="d-grid gap-2">
+                            @foreach (var opt in q.Options)
+                            {
+                                <label class="quiz-option-btn d-flex align-items-center gap-3 p-3 rounded-xl" style="border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s;">
+                                    <input type="radio" 
+                                           name="question_@q.WordId" 
+                                           value="@opt" 
+                                           required 
+                                           style="accent-color: var(--primary); width: 1.1rem; height: 1.1rem;" />
+                                    <span class="fw-semibold text-ink">@opt</span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Nút Nộp Bài -->
+                <div class="text-center my-6">
+                    <button type="submit" class="btn btn-primary btn-lg px-8 shadow-lift">
+                        <i class="fa-solid fa-paper-plane me-2"></i> Nộp bài kiểm tra
+                    </button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="card-plain text-center mt-6 p-10 shadow-card">
+                <p class="text-muted" style="font-size: 0.95rem;">
+                    Cấp HSK @Model.HskLevel chưa có đủ từ để tạo bài kiểm tra. Hãy thêm từ vựng mới hoặc đổi cấp HSK khác.
+                </p>
+            </div>
+        }
+    </div>
+</div>

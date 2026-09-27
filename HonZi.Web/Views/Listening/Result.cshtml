@@ -1,0 +1,114 @@
+@model HonZi.Web.Models.ViewModels.ListeningResultViewModel
+@{
+    ViewData["Title"] = "Kết quả bài Luyện nghe";
+    var isHigh = Model.AccuracyPercentage >= 80;
+    var isMedium = Model.AccuracyPercentage >= 50 && Model.AccuracyPercentage < 80;
+}
+
+<div class="main-content py-10">
+    <div class="container container-md" style="max-width: 840px;">
+        
+        <!-- Summary Card -->
+        <div class="card-plain text-center p-8 mb-8 shadow-card" style="background: #ffffff; border-radius: 20px;">
+            <div style="display: inline-flex; width: 5rem; height: 5rem; border-radius: 50%; background-color: @(isHigh ? "rgba(22, 163, 74, 0.12)" : (isMedium ? "rgba(234, 179, 8, 0.15)" : "rgba(220, 38, 38, 0.12)")); color: @(isHigh ? "var(--success)" : (isMedium ? "#ca8a04" : "var(--danger)")); align-items: center; justify-content: center; font-size: 2.75rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid @(isHigh ? "fa-trophy" : (isMedium ? "fa-medal" : "fa-headphones"))"></i>
+            </div>
+
+            <h1 class="text-ink fw-extrabold" style="font-size: 2rem;">
+                @(isHigh ? "Xuất sắc! Thính giác cực nhạy!" : (isMedium ? "Kết quả khá tốt!" : "Hãy tiếp tục rèn luyện nhé!"))
+            </h1>
+            
+            <p class="text-muted mt-2 mb-6" style="font-size: 1rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+                Bạn đã hoàn thành bài luyện nghe <strong>@(Model.ExerciseType == "Sentence" ? "Câu giao tiếp" : "Từ vựng")</strong> cấp độ <strong>HSK @Model.HskLevel</strong> bằng chế độ <strong>@(Model.InputMode == "Pinyin" ? "Gõ Pinyin" : "Gõ Chữ Hán")</strong>.
+            </p>
+
+            <!-- Score KPI Grid -->
+            <div class="d-grid grid-cols-2 gap-4 max-w-sm mx-auto mb-6" style="max-width: 380px;">
+                <div class="p-4 rounded-xl text-center" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <span class="text-muted fw-semibold d-block text-xs uppercase">Điểm số</span>
+                    <span class="text-ink fw-extrabold d-block mt-1" style="font-size: 2rem; color: var(--primary);">
+                        @Model.Score / @Model.TotalQuestions
+                    </span>
+                </div>
+                <div class="p-4 rounded-xl text-center" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <span class="text-muted fw-semibold d-block text-xs uppercase">Độ chính xác</span>
+                    <span class="fw-extrabold d-block mt-1" style="font-size: 2rem; color: @(isHigh ? "#15803d" : "#ca8a04");">
+                        @Model.AccuracyPercentage%
+                    </span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center flex-wrap gap-3">
+                <form asp-action="Start" method="post" style="display: inline;">
+                    <input type="hidden" name="hskLevel" value="@Model.HskLevel" />
+                    <input type="hidden" name="exerciseType" value="@Model.ExerciseType" />
+                    <input type="hidden" name="inputMode" value="@Model.InputMode" />
+                    <button type="submit" class="btn btn-primary btn-lg shadow-lift">
+                        <i class="fa-solid fa-rotate-left me-2"></i> Luyện lại lượt mới
+                    </button>
+                </form>
+                <a asp-action="Index" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-sliders me-2"></i> Đổi chế độ / Cấp HSK
+                </a>
+                <a asp-controller="Progress" asp-action="Index" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-chart-line me-2"></i> Xem thống kê
+                </a>
+            </div>
+        </div>
+
+        <!-- Detailed Review List -->
+        <div class="card-plain shadow-card p-6" style="background: #ffffff; border-radius: 16px;">
+            <h3 class="fw-bold text-ink mb-4" style="font-size: 1.2rem;">
+                <i class="fa-solid fa-list-check text-primary me-2"></i> Chi tiết từng câu nghe trong bài
+            </h3>
+
+            <div class="d-grid gap-3">
+                @for (int i = 0; i < Model.Questions.Count; i++)
+                {
+                    var item = Model.Questions[i];
+                    <div class="p-4 rounded-xl d-flex flex-wrap align-items-center justify-content-between gap-3" 
+                         style="background: @(item.IsCorrect ? "rgba(22, 163, 74, 0.04)" : "rgba(220, 38, 38, 0.04)"); border: 1px solid @(item.IsCorrect ? "rgba(22, 163, 74, 0.2)" : "rgba(220, 38, 38, 0.2)");">
+                        
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="d-flex align-items-center justify-content-center fw-bold" 
+                                  style="width: 2rem; height: 2rem; border-radius: 50%; background: @(item.IsCorrect ? "rgba(22, 163, 74, 0.15)" : "rgba(220, 38, 38, 0.15)"); color: @(item.IsCorrect ? "var(--success)" : "var(--danger)"); font-size: 0.9rem;">
+                                @(i + 1)
+                            </span>
+
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="font-hanzi fw-bold text-ink" style="font-size: 1.4rem;">@item.TargetHanzi</span>
+                                    <span class="text-primary fw-bold" style="font-size: 1.05rem;">(@item.TargetPinyin)</span>
+                                </div>
+                                <div class="text-muted" style="font-size: 0.875rem;">
+                                    @item.Meaning
+                                </div>
+                                <div class="mt-1" style="font-size: 0.85rem;">
+                                    <span class="text-muted">Bạn đã nhập:</span>
+                                    <strong class="@(item.IsCorrect ? "text-success" : "text-danger")">
+                                        @(string.IsNullOrWhiteSpace(item.UserAnswer) ? "(Bỏ trống)" : item.UserAnswer)
+                                    </strong>
+                                    @if (!item.IsCorrect)
+                                    {
+                                        <span class="badge badge-secondary ms-2">Chưa đúng</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-primary ms-2">Chính xác</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="button" class="btn btn-outline btn-icon" title="Nghe lại" onclick="speak('@item.AudioText')">
+                                <i class="fa-solid fa-volume-high text-primary"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
