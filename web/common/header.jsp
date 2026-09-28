@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HonziGo — Học từ vựng tiếng Trung bằng flashcard</title>
     <meta name="description" content="Học từ vựng tiếng Trung theo cấp độ HSK 1-6 với flashcard, quiz và ôn tập ngắt quãng.">
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/avatar.png" type="image/png">
-    <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/assets/avatar.png">
-    <meta property="og:image" content="https://huyz4nny.xyz/assets/preview.png">
-    <meta name="twitter:image" content="https://huyz4nny.xyz/assets/preview.png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/favicon.ico?v=3" type="image/x-icon">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/favicon.ico?v=3" type="image/x-icon">
+    <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/assets/favicon.png?v=3">
+    <meta property="og:image" content="https://huyz4nny.xyz/assets/og-banner.png?v=2">
+    <meta name="twitter:image" content="https://huyz4nny.xyz/assets/og-banner.png?v=2">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
