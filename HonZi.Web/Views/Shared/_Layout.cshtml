@@ -90,7 +90,7 @@
         <div class="container header-inner">
             <!-- Logo Brand -->
             <a asp-controller="Home" asp-action="Index" class="brand-logo">
-                <span class="logo-icon">汉</span>
+                <img src="~/assets/logo.png" alt="HonziGo Logo" class="brand-logo-img" />
                 <span class="logo-text">HonziGo</span>
             </a>
 
@@ -272,17 +272,103 @@
 
     <!-- Shared JavaScript Helpers -->
     <script>
-    // 1. Web Speech Synthesis API with adjustable rate
-    function speak(text, rate) {
+    // 1. Multi-Tier High-Fidelity Chinese Audio Engine
+    var globalAudioPlayer = null;
+
+    function speak(text, rate, onStart, onEnd) {
         if (!text || typeof window === 'undefined') return;
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
+        text = text.toString().trim();
+        if (!text) return;
+        rate = rate || 1.0;
+
+        // Stop any currently playing audio
+        if (globalAudioPlayer) {
+            try {
+                globalAudioPlayer.pause();
+                globalAudioPlayer.currentTime = 0;
+            } catch (e) {}
+            globalAudioPlayer = null;
+        }
+
+        var isFinished = false;
+        var triggerEnd = function() {
+            if (!isFinished) {
+                isFinished = true;
+                if (onEnd && typeof onEnd === 'function') onEnd();
+            }
+        };
+
+        if (onStart && typeof onStart === 'function') onStart();
+
+        // Strategy 1: High quality Youdao Chinese TTS MP3
+        var encoded = encodeURIComponent(text);
+        var youdaoUrl = 'https://dict.youdao.com/dictvoice?audio=' + encoded + '&le=zh';
+        
+        var audio = new Audio(youdaoUrl);
+        globalAudioPlayer = audio;
+        audio.playbackRate = rate;
+
+        audio.onended = triggerEnd;
+        audio.onerror = function() {
+            // Strategy 2: Google Translate Chinese TTS fallback
+            var googleUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=' + encoded;
+            var fallbackAudio = new Audio(googleUrl);
+            globalAudioPlayer = fallbackAudio;
+            fallbackAudio.playbackRate = rate;
+            fallbackAudio.onended = triggerEnd;
+            fallbackAudio.onerror = function() {
+                // Strategy 3: Web Speech Synthesis API fallback
+                speakWithSpeechSynthesis(text, rate, triggerEnd);
+            };
+            fallbackAudio.play().catch(function() {
+                speakWithSpeechSynthesis(text, rate, triggerEnd);
+            });
+        };
+
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(function(err) {
+                console.warn('Audio.play() blocked/failed, trying Web Speech Synthesis:', err);
+                speakWithSpeechSynthesis(text, rate, triggerEnd);
+            });
+        }
+    }
+
+    function speakWithSpeechSynthesis(text, rate, callback) {
+        if (!('speechSynthesis' in window)) {
+            if (callback) callback();
+            return;
+        }
+
+        try {
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
             var utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'zh-CN';
-            utterance.rate = rate || 0.85; // Default speech rate
+            utterance.rate = rate || 0.85;
+
+            var voices = window.speechSynthesis.getVoices();
+            if (voices && voices.length > 0) {
+                var zhVoice = voices.find(function(v) {
+                    return v.lang && (v.lang.startsWith('zh') || v.lang.includes('cmn'));
+                });
+                if (zhVoice) {
+                    utterance.voice = zhVoice;
+                }
+            }
+
+            utterance.onend = function() {
+                if (callback) callback();
+            };
+            utterance.onerror = function() {
+                if (callback) callback();
+            };
+
             window.speechSynthesis.speak(utterance);
-        } else {
-            console.warn('Trình duyệt không hỗ trợ Web Speech Synthesis.');
+        } catch (e) {
+            console.error('SpeechSynthesis error:', e);
+            if (callback) callback();
         }
     }
 

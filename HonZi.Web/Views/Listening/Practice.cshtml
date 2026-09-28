@@ -154,14 +154,38 @@ var nextQuestionUrl = '@(Model.CurrentIndex + 1 < Model.TotalQuestions ? Url.Act
 
 // Phát âm thanh của câu hỏi hiện tại
 function playCurrentAudio() {
+    var icon = document.getElementById('audioIcon');
+    var btn = document.getElementById('btnPlayAudio');
+    if (btn) {
+        btn.style.transform = 'scale(0.96)';
+    }
+    if (icon) {
+        icon.classList.remove('fa-volume-high');
+        icon.classList.add('fa-volume-low');
+    }
+
+    var resetBtn = function() {
+        if (btn) {
+            btn.style.transform = '';
+        }
+        if (icon) {
+            icon.classList.remove('fa-volume-low');
+            icon.classList.add('fa-volume-high');
+        }
+    };
+
     if (audioUrl && audioUrl.trim().length > 0) {
         var audio = new Audio(audioUrl);
         audio.playbackRate = currentSpeed;
-        audio.play().catch(function() {
-            speak(audioText, currentSpeed);
-        });
+        audio.onended = resetBtn;
+        var p = audio.play();
+        if (p !== undefined) {
+            p.catch(function() {
+                speak(audioText, currentSpeed, null, resetBtn);
+            });
+        }
     } else {
-        speak(audioText, currentSpeed);
+        speak(audioText, currentSpeed, null, resetBtn);
     }
 }
 

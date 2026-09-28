@@ -11,7 +11,7 @@
     <div class="container header-inner">
         <!-- Logo Brand -->
         <a href="${pageContext.request.contextPath}/index.jsp" class="brand-logo">
-            <span class="logo-icon">汉</span>
+            <img src="${pageContext.request.contextPath}/assets/logo.png" alt="HonziGo Logo" class="brand-logo-img" />
             <span class="logo-text">HonziGo</span>
         </a>
 
