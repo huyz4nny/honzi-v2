@@ -76,11 +76,11 @@ GO
 -- ========================================================
 -- TẠO TÀI KHOẢN ADMIN DUY NHẤT
 -- Username: admin
--- Mật khẩu: admin
--- Mã băm SHA-256: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+-- Mật khẩu: huydz123
+-- Mã băm SHA-256: 4b89603438f1de9e3c19c50aa6ddf1525e8b09e484e15bdf8bfd3cc463556a28
 -- ========================================================
 INSERT INTO Users (Username, PasswordHash, Email, Role) VALUES
-(N'admin', N'8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', N'admin@hanzigo.com', N'ADMIN');
+(N'admin', N'4b89603438f1de9e3c19c50aa6ddf1525e8b09e484e15bdf8bfd3cc463556a28', N'admin@hanzigo.com', N'ADMIN');
 GO
 
 -- ========================================================
